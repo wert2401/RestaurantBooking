@@ -41,7 +41,6 @@ namespace RestaurantBooking.Application.Services.UserService
                 throw new InvalidOperationException("Patch user error: user does not exist");
 
             user.Phone = editModel.Phone;
-            user.PasswordHash = BCrypt.Net.BCrypt.HashPassword(editModel.PasswordHash);
             user.Name = editModel.Name;
 
             user.Roles = new List<Role>();
