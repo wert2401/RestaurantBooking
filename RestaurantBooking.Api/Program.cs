@@ -45,10 +45,10 @@ namespace RestaurantBooking.Api
             builder.Services.AddModels();
             builder.Services.AddApplication(builder.Configuration);
 
-            builder.Services.AddCors(o => o.AddPolicy("ANY_ORIGIN",
+            builder.Services.AddCors(o => o.AddPolicy("dev",
                 p =>
                 {
-                    p.AllowAnyOrigin();
+                    p.WithOrigins("http://localhost:3000");
                     p.AllowAnyMethod();
                     p.AllowAnyHeader();
                 })
@@ -89,7 +89,7 @@ namespace RestaurantBooking.Api
             app.UseHttpsRedirection();
             app.UseStaticFiles();
 
-            app.UseCors("ANY_ORIGIN");
+            app.UseCors("dev");
 
             app.UseAuthentication();
             app.UseAuthorization();

@@ -29,6 +29,8 @@ namespace RestaurantBooking.Api.Models
 
             CreateMap<Data.Entities.User, UserModel>().ReverseMap();
 
+            CreateMap<UserEditModel, Data.Entities.User>();
+
             CreateMap<RegisterModel, UserModel>();
 
             CreateMap<Role, RoleModel>().ReverseMap();
