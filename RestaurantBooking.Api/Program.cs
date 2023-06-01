@@ -5,7 +5,6 @@ using Microsoft.OpenApi.Models;
 using RestaurantBooking.Api.Middlewares;
 using RestaurantBooking.Api.Models;
 using RestaurantBooking.Application;
-using RestaurantBooking.Data;
 using System.Text;
 
 namespace RestaurantBooking.Api
@@ -46,6 +45,15 @@ namespace RestaurantBooking.Api
             builder.Services.AddModels();
             builder.Services.AddApplication(builder.Configuration);
 
+            builder.Services.AddCors(o => o.AddPolicy("ANY_ORIGIN",
+                p =>
+                {
+                    p.AllowAnyOrigin();
+                    p.AllowAnyMethod();
+                    p.AllowAnyHeader();
+                })
+            );
+
             builder.Services.AddSwaggerGen(option =>
             {
                 option.SwaggerDoc("v1", new OpenApiInfo { Title = "Demo API", Version = "v1" });
@@ -80,6 +88,8 @@ namespace RestaurantBooking.Api
 
             app.UseHttpsRedirection();
             app.UseStaticFiles();
+
+            app.UseCors("ANY_ORIGIN");
 
             app.UseAuthentication();
             app.UseAuthorization();
