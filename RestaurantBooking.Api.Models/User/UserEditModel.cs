@@ -8,8 +8,6 @@ namespace RestaurantBooking.Api.Models.User
         [DataType(DataType.EmailAddress)]
         [EmailAddress]
         public string Email { get; set; } = null!;
-        [DataType(DataType.Password)]
-        [MinLength(8)]
         public string? Phone { get; set; }
     }
 }
