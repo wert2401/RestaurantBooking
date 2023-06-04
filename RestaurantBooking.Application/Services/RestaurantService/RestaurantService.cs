@@ -88,7 +88,12 @@ namespace RestaurantBooking.Application.Services.RestaurantService
 
         public ICollection<Restaurant> GetFavoritesbyUserId(int userId)
         {
-            return dbContext.Restaurants.AsNoTracking().Include(r => r.FavoritedBy).Where(r => r.FavoritedBy.Any(u => u.Id ==  userId)).ToList();
+            return dbContext.Restaurants.AsNoTracking()
+                .Include(r => r.FavoritedBy)
+                .Include(r => r.Reviews)
+                .Include(r => r.Tables)
+                    .ThenInclude(t => t.TableClaims)
+                .Where(r => r.FavoritedBy.Any(u => u.Id ==  userId)).ToList();
         }
 
         public void AddToFavorites(int userId, int restaurantId)
