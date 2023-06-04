@@ -10,8 +10,5 @@ namespace RestaurantBooking.Application.Services.RestaurantService
         Restaurant GetByOwnerEmail(string email);
         void Patch(Restaurant oldRest, Restaurant newRestaurantModel);
         void Rate(Review review);
-        ICollection<Restaurant> GetFavoritesbyUserId(int userId);
-        void AddToFavorites(int userId, int restaurantId);
-        void RemoveFromFavorites(int userId, int restaurantId);
     }
 }

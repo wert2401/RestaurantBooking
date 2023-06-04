@@ -12,5 +12,8 @@ namespace RestaurantBooking.Application.Services.UserService
         bool IsExist(string email);
         bool HasUserRestaurant(int id);
         void ChangePassword(string email, string password);
+        void AddToFavorites(int userId, int restaurantId);
+        void RemoveFromFavorites(int userId, int restaurantId);
+        ICollection<Restaurant> GetFavoritesbyUserId(int userId);
     }
 }

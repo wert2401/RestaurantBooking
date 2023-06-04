@@ -85,41 +85,5 @@ namespace RestaurantBooking.Application.Services.RestaurantService
 
             dbContext.SaveChanges();
         }
-
-        public ICollection<Restaurant> GetFavoritesbyUserId(int userId)
-        {
-            return dbContext.Restaurants.AsNoTracking()
-                .Include(r => r.FavoritedBy)
-                .Include(r => r.Reviews)
-                .Include(r => r.Tables)
-                    .ThenInclude(t => t.TableClaims)
-                .Where(r => r.FavoritedBy.Any(u => u.Id ==  userId)).ToList();
-        }
-
-        public void AddToFavorites(int userId, int restaurantId)
-        {
-            var rest = dbContext.Restaurants.Find(restaurantId);
-
-            if (rest == null)
-                throw new Exception("Restaurant is not found");
-
-            rest.FavoritedBy.Add(dbContext.Users.Find(userId)!);
-            
-            dbContext.SaveChanges();
-        }
-
-        public void RemoveFromFavorites(int userId, int restaurantId)
-        {
-            var rest = dbContext.Restaurants.Find(restaurantId);
-
-            if (rest == null)
-                throw new Exception("Restaurant is not found");
-
-            rest.FavoritedBy.Remove(dbContext.Users.Find(userId)!);
-
-            dbContext.SaveChanges();
-        }
-
-        
     }
 }

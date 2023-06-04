@@ -15,13 +15,11 @@ namespace RestaurantBooking.Api.Controllers
     public class UserController : ControllerBase
     {
         private readonly IUserService userService;
-        private readonly IRestaurantService restaurantService;
         private readonly IMapper mapper;
 
         public UserController(IUserService userService, IRestaurantService restaurantService, IMapper mapper)
         {
             this.userService = userService;
-            this.restaurantService = restaurantService;
             this.mapper = mapper;
         }
 
@@ -61,7 +59,7 @@ namespace RestaurantBooking.Api.Controllers
         public ActionResult<ICollection<RestaurantModel>> GetFavorites()
         {
             var userId = userService.GetByEmail(User.Identity!.Name!).Id;
-            return Ok(mapper.Map<ICollection<RestaurantModel>>(restaurantService.GetFavoritesbyUserId(userId)));
+            return Ok(mapper.Map<ICollection<RestaurantModel>>(userService.GetFavoritesbyUserId(userId)));
         }
 
         [HttpPost("AddToFavorites")]
@@ -69,7 +67,7 @@ namespace RestaurantBooking.Api.Controllers
         public IActionResult AddToFavorites([FromBody(EmptyBodyBehavior = Microsoft.AspNetCore.Mvc.ModelBinding.EmptyBodyBehavior.Disallow)] int restaurantId)
         {
             var user = userService.GetByEmail(User.Identity!.Name!);
-            restaurantService.AddToFavorites(user.Id, restaurantId);
+            userService.AddToFavorites(user.Id, restaurantId);
             return Ok();
         }
 
@@ -78,7 +76,7 @@ namespace RestaurantBooking.Api.Controllers
         public IActionResult RemoveFromFavorites([FromBody(EmptyBodyBehavior = Microsoft.AspNetCore.Mvc.ModelBinding.EmptyBodyBehavior.Disallow)] int restaurantId)
         {
             var user = userService.GetByEmail(User.Identity!.Name!);
-            restaurantService.RemoveFromFavorites(user.Id, restaurantId);
+            userService.RemoveFromFavorites(user.Id, restaurantId);
             return Ok();
         }
     }

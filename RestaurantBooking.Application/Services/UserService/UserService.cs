@@ -64,6 +64,54 @@ namespace RestaurantBooking.Application.Services.UserService
             dbContext.SaveChanges();
         }
 
+        public ICollection<Restaurant> GetFavoritesbyUserId(int userId)
+        {
+            return dbContext.Users.Where(u => u.Id == userId).AsNoTracking()
+                .Include(r => r.FavoriteRestaurants)
+                    .ThenInclude(r => r.Tables)
+                        .ThenInclude(t => t.TableClaims)
+                .Include(r => r.FavoriteRestaurants)
+                    .ThenInclude(r => r.Reviews)
+                .Select(u => u.FavoriteRestaurants).First().ToList();
+        }
+
+        public void AddToFavorites(int userId, int restaurantId)
+        {
+            var rest = dbContext.Restaurants.Find(restaurantId);
+
+            if (rest == null)
+                throw new Exception("Restaurant was not found");
+
+            var user = dbContext.Users.Include(u => u.FavoriteRestaurants).First(u => u.Id == userId);
+
+            if (user == null)
+                throw new Exception("user was not found");
+
+            if (user.FavoriteRestaurants.Any(r => r.Id == restaurantId))
+                throw new Exception("User has already favorited this restaurant");
+
+            user.FavoriteRestaurants.Add(rest);
+
+            dbContext.SaveChanges();
+        }
+
+        public void RemoveFromFavorites(int userId, int restaurantId)
+        {
+            var user = dbContext.Users.Include(u => u.FavoriteRestaurants).First(u => u.Id == userId);
+
+            if (user == null)
+                throw new Exception("user was not found");
+
+            var rest = user.FavoriteRestaurants.Find(r => r.Id == restaurantId);
+
+            if (rest == null)
+                throw new Exception("Restaurant was not found");
+
+            user.FavoriteRestaurants.Remove(rest);
+
+            dbContext.SaveChanges();
+        }
+
         public void SetRefreshToken(int id, string refreshToken, DateTime expiringTime)
         {
             User? user = dbContext.Users.Find(id);
