@@ -2,7 +2,7 @@
 
 namespace RestaurantBooking.Api.Models.Restaurant
 {
-    public class RestaurantModelEdit : BaseModel
+    public class RestaurantModelEdit
     {
         [Required]
         public string Name { get; set; } = null!;

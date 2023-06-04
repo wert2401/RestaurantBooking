@@ -7,7 +7,8 @@ namespace RestaurantBooking.Application.Services.RestaurantService
         void Add(Restaurant newModel);
         IQueryable<Restaurant> GetAll();
         Restaurant GetById(int id);
-        void Patch(Restaurant newRestaurantModel);
+        Restaurant GetByOwnerEmail(string email);
+        void Patch(Restaurant oldRest, Restaurant newRestaurantModel);
         void Rate(Review review);
         ICollection<Restaurant> GetFavoritesbyUserId(int userId);
         void AddToFavorites(int userId, int restaurantId);

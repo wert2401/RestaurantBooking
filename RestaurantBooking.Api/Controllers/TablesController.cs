@@ -30,19 +30,37 @@ namespace RestaurantBooking.Api.Controllers
 
         [HttpGet]
         [EnableQuery]
-        public IQueryable<TableModel> Get()
+        public IQueryable<TableModel> GetTables()
         {
             return tableService.GetAll().ProjectTo<TableModel>(mapper.ConfigurationProvider);
+        }
+
+        [HttpGet("UserClaims")]
+        [Authorize(Roles = "Member")]
+        public IQueryable<TableClaimModel> GetClaimsByUser()
+        {
+            var user = userService.GetByEmail(User.Identity!.Name!);
+            return tableService.GetAllClaims().Where(x => x.UserId == user.Id).ProjectTo<TableClaimModel>(mapper.ConfigurationProvider);
+        }
+
+        [HttpGet("RestaurantClaims")]
+        [Authorize(Roles = "Admin")]
+        public IQueryable<TableClaimModel> GetClaimsByRestaurant()
+        {
+            var restautant = restaurantService.GetByOwnerEmail(User.Identity!.Name!);
+            return restautant.Tables.Select(t => t.TableClaims).AsQueryable().ProjectTo<TableClaimModel>(mapper.ConfigurationProvider);
         }
 
         [HttpPost]
         [Authorize(Roles = "Admin")]
         public IActionResult Post(TableModelCreate modelCreate)
         {
-            if (!IsOwner(modelCreate.RestaurantId))
+            var restaurant = restaurantService.GetByOwnerEmail(User?.Identity?.Name!);
+
+            if (restaurant == null)
                 return Unauthorized();
 
-            tableService.Add(mapper.Map<Table>(modelCreate));
+            tableService.Add(restaurant.Id, mapper.Map<Table>(modelCreate));
             return Ok();
         }
 
@@ -52,18 +70,6 @@ namespace RestaurantBooking.Api.Controllers
         {
             tableService.ClaimTable(id, User.Identity!.Name!, dateTime);
             return Ok();
-        }
-
-        private bool IsOwner(int restId)
-        {
-            var onwer = userService.GetByEmail(User.Identity!.Name!);
-
-            var restaurant = restaurantService.GetById(restId);
-
-            if (restaurant.OwnerUserId != onwer.Id)
-                return false;
-            else
-                return true;
         }
     }
 }

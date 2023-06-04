@@ -44,12 +44,14 @@ namespace RestaurantBooking.Api.Controllers
 
         [HttpPatch]
         [Authorize(Roles = "Admin")]
-        public IActionResult PatchInfo(int id, RestaurantModelEdit editedRestaurant)
+        public IActionResult PatchInfo(RestaurantModelEdit editedRestaurant)
         {
-            if (!IsOwner(id, out Restaurant rest, out User user))
+            var rest = restaurantService.GetByOwnerEmail(User.Identity!.Name!);
+
+            if (rest == null)
                 return Unauthorized();
 
-            restaurantService.Patch(mapper.Map<Restaurant>(editedRestaurant));
+            restaurantService.Patch(rest, mapper.Map<Restaurant>(editedRestaurant));
             return Ok();
         }
 
@@ -78,16 +80,18 @@ namespace RestaurantBooking.Api.Controllers
 
         [HttpPost("ChangeImage")]
         [Authorize(Roles = "Admin")]
-        public IActionResult ChangeImage(int id, IFormFile image)
+        public IActionResult ChangeImage(IFormFile image)
         {
-            if (!IsOwner(id, out Restaurant rest, out User user))
+            var rest = restaurantService.GetByOwnerEmail(User.Identity!.Name!);
+
+            if (rest == null)
                 return Unauthorized();
 
             string pathToImage = imageService.SaveImage(image);
 
             rest.MainPhoto = pathToImage;
 
-            restaurantService.Patch(rest);
+            restaurantService.Patch(rest, rest);
 
             return Ok(new { NewImgUrl = pathToImage });
         }
@@ -103,18 +107,6 @@ namespace RestaurantBooking.Api.Controllers
             restaurantService.Rate(review);
 
             return Ok();
-        }
-
-        private bool IsOwner(int restId, out Restaurant restaurant, out User onwer)
-        {
-            onwer = userService.GetByEmail(User.Identity!.Name!);
-
-            restaurant = restaurantService.GetById(restId);
-
-            if (restaurant.OwnerUserId != onwer.Id)
-                return false;
-            else
-                return true;
         }
     }
 }

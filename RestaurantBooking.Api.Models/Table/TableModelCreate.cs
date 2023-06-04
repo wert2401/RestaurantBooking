@@ -7,8 +7,6 @@ namespace RestaurantBooking.Api.Models.Table
         [Required]
         public int TableNumber { get; set; }
         [Required]
-        public int RestaurantId { get; set; }
-        [Required]
         public int Capacity { get; set; }
         [Required]
         public double PositionX { get; set; }

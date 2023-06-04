@@ -16,14 +16,20 @@ namespace RestaurantBooking.Application.Services.TableService
             this.userService = userService;
         }
 
-        public void Add(Table newModel)
+        public void Add(int restaurantId, Table newModel)
         {
+            newModel.RestaurantId = restaurantId;
             dbContext.Tables.Add(newModel);
         }
 
         public IQueryable<Table> GetAll()
         {
-            return dbContext.Tables.Include(t => t.TableClaims);
+            return dbContext.Tables.AsNoTracking().Include(t => t.TableClaims);
+        }
+
+        public IQueryable<TableClaim> GetAllClaims()
+        {
+            return dbContext.TableClaims.AsNoTracking();
         }
 
         public void ClaimTable(int tableId, string userEmail, DateTime claimDate)
