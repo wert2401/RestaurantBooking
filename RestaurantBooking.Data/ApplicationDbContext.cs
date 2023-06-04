@@ -8,7 +8,7 @@ namespace RestaurantBooking.Data
     {
         public ApplicationDbContext(DbContextOptions options) : base(options)
         {
-            //Database.Migrate();
+            Database.Migrate();
         }
 
         public DbSet<User> Users { get; set; }
