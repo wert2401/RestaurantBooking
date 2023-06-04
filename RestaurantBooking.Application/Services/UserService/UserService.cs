@@ -46,7 +46,21 @@ namespace RestaurantBooking.Application.Services.UserService
             user.Roles = new List<Role>();
 
             dbContext.Users.Update(user);
+            dbContext.SaveChanges();
+        }
 
+        public void ChangePassword(string email, string password)
+        {
+            User? user = getByEmail(email);
+
+            if (user == null)
+                throw new InvalidOperationException("Change password error: user does not exist");
+
+            user.PasswordHash = BCrypt.Net.BCrypt.HashPassword(password);
+
+            user.Roles = new List<Role>();
+
+            dbContext.Update(user);
             dbContext.SaveChanges();
         }
 
@@ -61,7 +75,6 @@ namespace RestaurantBooking.Application.Services.UserService
             user.RefreshTokenExpiring = expiringTime;
 
             dbContext.Update(user);
-
             dbContext.SaveChanges();
         }
 
@@ -76,7 +89,6 @@ namespace RestaurantBooking.Application.Services.UserService
             user.RefreshTokenExpiring = expiringTime;
 
             dbContext.Update(user);
-
             dbContext.SaveChanges();
         }
 
@@ -91,5 +103,7 @@ namespace RestaurantBooking.Application.Services.UserService
         }
 
         private User? getByEmail(string email) => dbContext.Users.AsNoTracking().FirstOrDefault(u => u.Email == email);
+
+        
     }
 }

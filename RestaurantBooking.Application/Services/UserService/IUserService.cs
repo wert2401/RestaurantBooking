@@ -11,5 +11,6 @@ namespace RestaurantBooking.Application.Services.UserService
         void SetRefreshToken(string email, string refreshToken, DateTime expiringTime);
         bool IsExist(string email);
         bool HasUserRestaurant(int id);
+        void ChangePassword(string email, string password);
     }
 }

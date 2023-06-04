@@ -6,6 +6,7 @@ using RestaurantBooking.Api.Models.User;
 using RestaurantBooking.Application.Services.RestaurantService;
 using RestaurantBooking.Application.Services.UserService;
 using RestaurantBooking.Data.Entities;
+using System.ComponentModel.DataAnnotations;
 
 namespace RestaurantBooking.Api.Controllers
 {
@@ -37,13 +38,22 @@ namespace RestaurantBooking.Api.Controllers
             return Ok(userModel);
         }
 
-        [HttpPatch]
+        [HttpPatch("EditUser")]
         [Authorize]
-        public ActionResult<UserModel> Patch(UserEditModel model)
+        public ActionResult<UserModel> EditUser(UserEditModel model)
         {
             model.Email = User.Identity!.Name!;
             userService.Patch(mapper.Map<User>(model));
             return Ok(model);
+        }
+
+        [HttpPatch("ChangePassword")]
+        [Authorize]
+        public IActionResult ChangePassword([Required(ErrorMessage = "Необходимо ввести пароль"), DataType(DataType.Password), MinLength(8)] string newPassword)
+        {
+            string email = User.Identity!.Name!;
+            userService.ChangePassword(email, newPassword);
+            return Ok();
         }
 
         [HttpGet("Favorites")]
