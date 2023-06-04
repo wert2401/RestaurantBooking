@@ -71,5 +71,22 @@ namespace RestaurantBooking.Api.Controllers
             tableService.ClaimTable(id, User.Identity!.Name!, dateTime);
             return Ok();
         }
+
+        [HttpPost("Unclaim")]
+        [Authorize]
+        public IActionResult UnclaimTable(int tableClaimid)
+        {
+            var claim = tableService.GetTableClaimById(tableClaimid);
+            var user = userService.GetByEmail(User.Identity!.Name!);
+
+            if (claim == null)
+                return BadRequest("Table claim was not found");
+
+            if (claim.UserId !=  user.Id)
+                return Unauthorized();
+
+            tableService.UnclaimTable(tableClaimid);
+            return Ok();
+        }
     }
 }

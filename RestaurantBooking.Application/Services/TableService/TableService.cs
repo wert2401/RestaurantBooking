@@ -32,6 +32,11 @@ namespace RestaurantBooking.Application.Services.TableService
             return dbContext.TableClaims.AsNoTracking();
         }
 
+        public TableClaim? GetTableClaimById(int tableClaimId)
+        {
+            return dbContext.TableClaims.Find(tableClaimId);
+        }
+
         public void ClaimTable(int tableId, string userEmail, DateTime claimDate)
         {
             var user = userService.GetByEmail(userEmail);
@@ -52,6 +57,19 @@ namespace RestaurantBooking.Application.Services.TableService
 
             dbContext.Tables.Update(table);
 
+            dbContext.SaveChanges();
+        }
+
+        public void UnclaimTable(int tableClaimId)
+        {
+            var tableClaim = dbContext.TableClaims.Find(tableClaimId);
+
+            if (tableClaim == null)
+                throw new InvalidOperationException("Table cliam with the given id was not found");
+
+            tableClaim.IsExpired = true;
+
+            dbContext.Update(tableClaim);
             dbContext.SaveChanges();
         }
     }
