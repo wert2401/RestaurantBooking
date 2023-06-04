@@ -66,10 +66,9 @@ namespace RestaurantBooking.Api.Controllers
 
         [HttpPost("Claim")]
         [Authorize]
-        public IActionResult ClaimTable([FromBody(EmptyBodyBehavior = Microsoft.AspNetCore.Mvc.ModelBinding.EmptyBodyBehavior.Disallow)] int id,
-                                        [FromBody(EmptyBodyBehavior = Microsoft.AspNetCore.Mvc.ModelBinding.EmptyBodyBehavior.Disallow)] DateTime dateTime)
+        public IActionResult ClaimTable(TableClaimRequestModel tableClaimRequest)
         {
-            tableService.ClaimTable(id, User.Identity!.Name!, dateTime);
+            tableService.ClaimTable(tableClaimRequest.Id, User.Identity!.Name!, tableClaimRequest.DateTime);
             return Ok();
         }
 
