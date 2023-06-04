@@ -66,7 +66,8 @@ namespace RestaurantBooking.Api.Controllers
 
         [HttpPost("Claim")]
         [Authorize]
-        public IActionResult ClaimTable(int id, DateTime dateTime)
+        public IActionResult ClaimTable([FromBody(EmptyBodyBehavior = Microsoft.AspNetCore.Mvc.ModelBinding.EmptyBodyBehavior.Disallow)] int id,
+                                        [FromBody(EmptyBodyBehavior = Microsoft.AspNetCore.Mvc.ModelBinding.EmptyBodyBehavior.Disallow)] DateTime dateTime)
         {
             tableService.ClaimTable(id, User.Identity!.Name!, dateTime);
             return Ok();
@@ -74,7 +75,7 @@ namespace RestaurantBooking.Api.Controllers
 
         [HttpPost("Unclaim")]
         [Authorize]
-        public IActionResult UnclaimTable(int tableClaimid)
+        public IActionResult UnclaimTable([FromBody(EmptyBodyBehavior = Microsoft.AspNetCore.Mvc.ModelBinding.EmptyBodyBehavior.Disallow)] int tableClaimid)
         {
             var claim = tableService.GetTableClaimById(tableClaimid);
             var user = userService.GetByEmail(User.Identity!.Name!);

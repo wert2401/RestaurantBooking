@@ -49,7 +49,7 @@ namespace RestaurantBooking.Api.Controllers
 
         [HttpPatch("ChangePassword")]
         [Authorize]
-        public IActionResult ChangePassword([Required(ErrorMessage = "Необходимо ввести пароль"), DataType(DataType.Password), MinLength(8)] string newPassword)
+        public IActionResult ChangePassword([FromBody(EmptyBodyBehavior = Microsoft.AspNetCore.Mvc.ModelBinding.EmptyBodyBehavior.Disallow)][Required(ErrorMessage = "Необходимо ввести пароль"), DataType(DataType.Password), MinLength(8)] string newPassword)
         {
             string email = User.Identity!.Name!;
             userService.ChangePassword(email, newPassword);
@@ -66,7 +66,7 @@ namespace RestaurantBooking.Api.Controllers
 
         [HttpPost("AddToFavorites")]
         [Authorize]
-        public IActionResult AddToFavorites(int restaurantId)
+        public IActionResult AddToFavorites([FromBody(EmptyBodyBehavior = Microsoft.AspNetCore.Mvc.ModelBinding.EmptyBodyBehavior.Disallow)] int restaurantId)
         {
             var user = userService.GetByEmail(User.Identity!.Name!);
             restaurantService.AddToFavorites(user.Id, restaurantId);
@@ -75,7 +75,7 @@ namespace RestaurantBooking.Api.Controllers
 
         [HttpPost("RemoveFromFavorites")]
         [Authorize]
-        public IActionResult RemoveFromFavorites(int restaurantId)
+        public IActionResult RemoveFromFavorites([FromBody(EmptyBodyBehavior = Microsoft.AspNetCore.Mvc.ModelBinding.EmptyBodyBehavior.Disallow)] int restaurantId)
         {
             var user = userService.GetByEmail(User.Identity!.Name!);
             restaurantService.RemoveFromFavorites(user.Id, restaurantId);

@@ -37,7 +37,7 @@ namespace RestaurantBooking.Api.Controllers
         }
 
         [HttpGet("Details")]
-        public ActionResult<RestaurantModelDetailed> Get(int id)
+        public ActionResult<RestaurantModelDetailed> Get([FromBody(EmptyBodyBehavior = Microsoft.AspNetCore.Mvc.ModelBinding.EmptyBodyBehavior.Disallow)] int id)
         {
             return Ok(mapper.Map<RestaurantModelDetailed>(restaurantService.GetById(id)));
         }
