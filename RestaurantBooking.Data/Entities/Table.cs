@@ -12,6 +12,8 @@ namespace RestaurantBooking.Data.Entities
         public double PositionX { get; set; }
         public double PositionY { get; set; }
 
+        public bool IsClaimed => TableClaims.Any(c => !c.IsExpired || TableClaims.Count == 0);
+
         public Restaurant Restaurant { get; set; } = null!;
 
         public List<TableClaim> TableClaims { get; set; } = new();

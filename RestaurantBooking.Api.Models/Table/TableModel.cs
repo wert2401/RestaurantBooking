@@ -13,5 +13,6 @@ namespace RestaurantBooking.Api.Models.Table
         public int Capacity { get; set; }
         public double PositionX { get; set; }
         public double PositionY { get; set; }
+        public bool IsClaimed { get; set; }
     }
 }
