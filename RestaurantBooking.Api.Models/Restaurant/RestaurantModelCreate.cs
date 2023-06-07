@@ -10,7 +10,7 @@ namespace RestaurantBooking.Api.Models.Restaurant
         public string Name { get; set; } = null!;
         [Required]
         public string Description { get; set; } = null!;
-        public IFormFile? MainPhoto { get; set; }
+        public IFormFile? SchemeImage { get; set; }
         public List<string>? PhoneNumbers { get; set; }
         [Required]
         [MaxLength(500)]

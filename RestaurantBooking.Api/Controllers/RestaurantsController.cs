@@ -71,10 +71,10 @@ namespace RestaurantBooking.Api.Controllers
 
             Restaurant newRest = mapper.Map<Restaurant>(model);
 
-            if (model.MainPhoto != null)
+            if (model.SchemeImage != null)
             {
-                string pathToImage = imageService.SaveImage(model.MainPhoto);
-                newRest.MainPhoto = pathToImage;
+                string pathToImage = imageService.SaveImage(model.SchemeImage);
+                newRest.SchemeImage = pathToImage;
             }
 
             newRest.OwnerUserId = user.Id;
@@ -94,7 +94,7 @@ namespace RestaurantBooking.Api.Controllers
 
             string pathToImage = imageService.SaveImage(image);
 
-            rest.MainPhoto = pathToImage;
+            rest.SchemeImage = pathToImage;
 
             restaurantService.Patch(rest, rest);
 

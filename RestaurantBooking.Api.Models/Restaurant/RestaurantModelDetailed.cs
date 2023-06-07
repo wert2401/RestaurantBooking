@@ -11,12 +11,10 @@ namespace RestaurantBooking.Api.Models.Restaurant
         public string Description { get; set; } = null!;
         [Required]
         public int OwnerUserId { get; set; }
-        public string? MainPhoto { get; set; }
+        public string? SchemeImage { get; set; }
         public List<string>? PhoneNumbers { get; set; }
         [Required]
         public string Address { get; set; } = null!;
-        [Required]
-        public string TablesScheme { get; set; } = null!;
         [Required]
         public int TablesCount { get; set; }
         [Required]
