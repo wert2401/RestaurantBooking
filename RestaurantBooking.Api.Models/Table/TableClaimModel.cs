@@ -9,7 +9,9 @@ namespace RestaurantBooking.Api.Models.Table
         [Required]
         public int UserId { get; set; }
         public bool IsExpired { get; set; }
+        public bool IsCanceled { get; set; }
         public DateTime CreatedDate { get; set; }
-        public DateTime ClaimDate { get; set; }
+        public DateTime ClaimFromDate { get; set; }
+        public DateTime ClaimToDate { get; set; }
     }
 }

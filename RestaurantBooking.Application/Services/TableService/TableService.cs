@@ -37,25 +37,37 @@ namespace RestaurantBooking.Application.Services.TableService
             return dbContext.TableClaims.Find(tableClaimId);
         }
 
-        public void ClaimTable(int tableId, string userEmail, DateTime claimDate)
+        public void ClaimTable(TableClaim tableClaim, string userEmail)
         {
             var user = userService.GetByEmail(userEmail);
 
-            if (user == null) throw new InvalidOperationException("User with the given email does not exist");
+            if (user == null) 
+                throw new InvalidOperationException("User with the given email does not exist");
 
-            Table? table = dbContext.Tables.Find(tableId);
+            Table? table = dbContext.Tables.Find(tableClaim.TableId);
 
-            if (table == null) throw new InvalidOperationException("Table with the given id does not exist");
+            if (table == null) 
+                throw new InvalidOperationException("Table with the given id does not exist");
 
-            dbContext.TableClaims.Add(new TableClaim
-            {
-                UserId = user.Id,
-                TableId = tableId,
-                ClaimDate = claimDate,
-                CreatedDate = DateTime.Now
-            });
+            dbContext.Entry(table).Collection(t => t.TableClaims).Load();
 
-            dbContext.Tables.Update(table);
+            var hasClaimedBefore = table.TableClaims.Where(x => x.UserId == user.Id && !x.IsCanceled).ToList().Any(c => !c.IsExpired);
+
+            if (hasClaimedBefore)
+                throw new InvalidOperationException("User has claimed this table before");
+
+            var rest = dbContext.Restaurants.Find(table.RestaurantId);
+
+            if (rest == null)
+                throw new InvalidOperationException("Table with the given id was not found");
+
+            if (tableClaim.ClaimFromDate.TimeOfDay < rest.OpenFrom || tableClaim.ClaimToDate.TimeOfDay > rest.OpenTo)
+                throw new InvalidOperationException("Time for claiming is wrong. Work time of restaurant does not fit with the claimed time");
+
+            tableClaim.UserId = user.Id;
+            tableClaim.CreatedDate = DateTime.UtcNow;
+
+            dbContext.TableClaims.Add(tableClaim);
 
             dbContext.SaveChanges();
         }
@@ -65,9 +77,9 @@ namespace RestaurantBooking.Application.Services.TableService
             var tableClaim = dbContext.TableClaims.Find(tableClaimId);
 
             if (tableClaim == null)
-                throw new InvalidOperationException("Table cliam with the given id was not found");
+                throw new InvalidOperationException("Table claim with the given id was not found");
 
-            tableClaim.IsExpired = true;
+            tableClaim.IsCanceled = true;
 
             dbContext.Update(tableClaim);
             dbContext.SaveChanges();

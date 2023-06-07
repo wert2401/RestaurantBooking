@@ -67,7 +67,7 @@ namespace RestaurantBooking.Application.Services.Authentication
 
             (var token, string refreshToken) = GenerateTokens(authClaims);
 
-            userService.SetRefreshToken(user.Id, refreshToken, DateTime.Now.AddDays(jwtOption.RefreshTokenValidityInDays));
+            userService.SetRefreshToken(user.Id, refreshToken, DateTime.UtcNow.AddDays(jwtOption.RefreshTokenValidityInDays));
 
             return new AuthenticatedModel(new JwtSecurityTokenHandler().WriteToken(token), refreshToken, token.ValidTo);
         }
@@ -93,12 +93,12 @@ namespace RestaurantBooking.Application.Services.Authentication
 
             var user = userService.GetByEmail(email);
 
-            if (user == null || user.RefreshToken != tokenRefreshModel.RefreshToken || user.RefreshTokenExpiring <= DateTime.Now)
+            if (user == null || user.RefreshToken != tokenRefreshModel.RefreshToken || user.RefreshTokenExpiring <= DateTime.UtcNow)
                 throw new SecurityTokenException("Refresh token are not valid");
 
             (var token, string refreshToken) = GenerateTokens(principal.Claims);
 
-            userService.SetRefreshToken(user.Id, refreshToken, DateTime.Now.AddDays(jwtOption.RefreshTokenValidityInDays));
+            userService.SetRefreshToken(user.Id, refreshToken, DateTime.UtcNow.AddDays(jwtOption.RefreshTokenValidityInDays));
 
             return new AuthenticatedModel(new JwtSecurityTokenHandler().WriteToken(token), refreshToken, token.ValidTo);
         }
@@ -110,7 +110,7 @@ namespace RestaurantBooking.Application.Services.Authentication
             var token = new JwtSecurityToken(
                 issuer: jwtOption.ValidIssuer,
                 audience: jwtOption.ValidAudience,
-                expires: DateTime.Now.AddMinutes(jwtOption.TokenValidityInMinutes),
+                expires: DateTime.UtcNow.AddMinutes(jwtOption.TokenValidityInMinutes),
                 claims: authClaims,
                 signingCredentials: new SigningCredentials(authSigningKey, SecurityAlgorithms.HmacSha256)
             );

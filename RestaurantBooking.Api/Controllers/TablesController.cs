@@ -68,7 +68,10 @@ namespace RestaurantBooking.Api.Controllers
         [Authorize]
         public IActionResult ClaimTable(TableClaimRequestModel tableClaimRequest)
         {
-            tableService.ClaimTable(tableClaimRequest.Id, User.Identity!.Name!, tableClaimRequest.DateTime);
+            var user = userService.GetByEmail(User.Identity?.Name!);
+
+            var tableClaim = mapper.Map<TableClaim>(tableClaimRequest);
+            tableService.ClaimTable(tableClaim, User.Identity!.Name!);
             return Ok();
         }
 

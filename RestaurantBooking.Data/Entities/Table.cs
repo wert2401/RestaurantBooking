@@ -8,7 +8,7 @@ namespace RestaurantBooking.Data.Entities
         public int TableNumber { get; set; }
         public int RestaurantId { get; set; }
 
-        public bool IsClaimed => TableClaims.Any(c => !c.IsExpired || TableClaims.Count == 0);
+        public bool IsClaimed => TableClaims.Any(c => !c.IsExpired && !c.IsCanceled || TableClaims.Count == 0);
 
         public Restaurant Restaurant { get; set; } = null!;
 

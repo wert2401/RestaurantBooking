@@ -24,8 +24,9 @@ namespace RestaurantBooking.Api.Models
 
             CreateMap<TableModelCreate, Data.Entities.Table>();
 
-            CreateMap<TableClaim, TableClaimModel>()
-                .ReverseMap();
+            CreateMap<TableClaim, TableClaimModel>();
+
+            CreateMap<TableClaimRequestModel, TableClaim>();
 
             CreateMap<Data.Entities.User, UserModel>().ReverseMap();
 
