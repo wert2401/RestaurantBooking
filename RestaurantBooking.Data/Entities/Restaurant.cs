@@ -20,7 +20,7 @@ namespace RestaurantBooking.Data.Entities
         public TimeSpan OpenFrom { get; set; }
         public TimeSpan OpenTo { get; set; }
 
-        public int TablesCount => Tables.Count;
+        public int TablesCount { get; set; }
         public int VacantTablesCount => Tables.Where(t => !t.TableClaims.Any(c => !c.IsExpired) || t.TableClaims.Count == 0).Count();
         public double Rating => Reviews.Count > 0 ? Reviews.Sum(r => r.Grade) / Reviews.Count : 0;
 

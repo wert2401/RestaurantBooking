@@ -62,6 +62,22 @@ namespace RestaurantBooking.Application.Services.RestaurantService
             newRestaurantModel.Id = oldRestaurant.Id;
             newRestaurantModel.OwnerUserId = oldRestaurant.OwnerUserId;
 
+            dbContext.Attach(newRestaurantModel);
+            dbContext.Entry(newRestaurantModel).Collection(r => r.Tables).Load();
+
+            if (newRestaurantModel.TablesCount < newRestaurantModel.Tables.Count)
+            {
+                newRestaurantModel.Tables.RemoveRange(newRestaurantModel.TablesCount, newRestaurantModel.Tables.Count - newRestaurantModel.TablesCount);
+            }
+
+            if (newRestaurantModel.TablesCount > newRestaurantModel.Tables.Count)
+            {
+                for (int i = newRestaurantModel.Tables.Count; i < newRestaurantModel.TablesCount; i++)
+                {
+                    newRestaurantModel.Tables.Add(new Table { TableNumber = i + 1 });
+                }
+            }
+
             dbContext.Restaurants.Update(newRestaurantModel);
 
             dbContext.SaveChanges();
@@ -69,6 +85,11 @@ namespace RestaurantBooking.Application.Services.RestaurantService
 
         public void Add(Restaurant newModel)
         {
+            for (int i = 0; i < newModel.TablesCount; i++)
+            {
+                newModel.Tables.Add(new Table { TableNumber = i + 1 });
+            }
+
             dbContext.Restaurants.Add(newModel);
 
             dbContext.SaveChanges();

@@ -69,8 +69,8 @@ namespace RestaurantBooking.Data
         {
             modelBuilder.Entity<Restaurant>().HasData(new[]
             {
-                new Restaurant { Id = 1, OwnerUserId = 1, Name = "Test rest", Description = "Owner is owner 1", Address = "Test address", PhoneNumbers = new() { "+79991112233", "+79991112233" } },
-                new Restaurant { Id = 2, OwnerUserId = 2, Name = "Test rest2", Description = "Owner is owner 2", Address = "Test address2", PhoneNumbers = new() { "+79991112233", "+79991112233" } }
+                new Restaurant { Id = 1, OwnerUserId = 1, Name = "Test rest", Description = "Owner is owner 1", Address = "Test address", PhoneNumbers = new() { "+79991112233", "+79991112233" }, TablesCount = 3 },
+                new Restaurant { Id = 2, OwnerUserId = 2, Name = "Test rest2", Description = "Owner is owner 2", Address = "Test address2", PhoneNumbers = new() { "+79991112233", "+79991112233" }, TablesCount = 3 }
             });
         }
 
@@ -78,12 +78,12 @@ namespace RestaurantBooking.Data
         {
             modelBuilder.Entity<Table>().HasData(new[]
             {
-                new Table { Id = 1, RestaurantId = 1, TableNumber = 1, Capacity = 4 },
-                new Table { Id = 2, RestaurantId = 1, TableNumber = 2, Capacity = 3 },
-                new Table { Id = 3, RestaurantId = 1, TableNumber = 3, Capacity = 3 },
-                new Table { Id = 4, RestaurantId = 2, TableNumber = 1, Capacity = 14 },
-                new Table { Id = 5, RestaurantId = 2, TableNumber = 2, Capacity = 13 },
-                new Table { Id = 6, RestaurantId = 2, TableNumber = 3, Capacity = 13 },
+                new Table { Id = 1, RestaurantId = 1, TableNumber = 1,},
+                new Table { Id = 2, RestaurantId = 1, TableNumber = 2 },
+                new Table { Id = 3, RestaurantId = 1, TableNumber = 3 },
+                new Table { Id = 4, RestaurantId = 2, TableNumber = 1,},
+                new Table { Id = 5, RestaurantId = 2, TableNumber = 2 },
+                new Table { Id = 6, RestaurantId = 2, TableNumber = 3 },
             });
         }
     }
