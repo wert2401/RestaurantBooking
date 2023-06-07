@@ -1,5 +1,4 @@
 ﻿using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
 
 namespace RestaurantBooking.Data.Entities
 {
@@ -17,6 +16,9 @@ namespace RestaurantBooking.Data.Entities
         [Required]
         [MaxLength(500)]
         public string Address { get; set; } = null!;
+
+        public TimeSpan OpenFrom { get; set; }
+        public TimeSpan OpenTo { get; set; }
 
         public int TablesCount => Tables.Count;
         public int VacantTablesCount => Tables.Where(t => !t.TableClaims.Any(c => !c.IsExpired) || t.TableClaims.Count == 0).Count();

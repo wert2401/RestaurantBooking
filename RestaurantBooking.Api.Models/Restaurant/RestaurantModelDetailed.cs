@@ -23,5 +23,10 @@ namespace RestaurantBooking.Api.Models.Restaurant
         public int VacantTablesCount { get; set; }
         public double Rating { get; set; }
         public ICollection<TableModel>? Tables { get; set; }
+
+        [Required]
+        public TimeSpan OpenFrom { get; set; }
+        [Required]
+        public TimeSpan OpenTo { get; set; }
     }
 }

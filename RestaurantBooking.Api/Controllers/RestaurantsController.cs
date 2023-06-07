@@ -20,13 +20,15 @@ namespace RestaurantBooking.Api.Controllers
         private readonly IUserService userService;
         private readonly IImageService imageService;
         private readonly IMapper mapper;
+        private readonly ILogger logger;
 
-        public RestaurantsController(IRestaurantService restaurantService, IUserService userService, IImageService imageService, IMapper mapper)
+        public RestaurantsController(IRestaurantService restaurantService, IUserService userService, IImageService imageService, IMapper mapper, ILogger<RestaurantsController> logger)
         {
             this.restaurantService = restaurantService;
             this.userService = userService;
             this.imageService = imageService;
             this.mapper = mapper;
+            this.logger = logger;
         }
 
         [HttpGet]
@@ -46,6 +48,9 @@ namespace RestaurantBooking.Api.Controllers
         [Authorize(Roles = "Admin")]
         public IActionResult PatchInfo(RestaurantModelEdit editedRestaurant)
         {
+            if (editedRestaurant.OpenFrom.TotalHours < 0 || editedRestaurant.OpenTo.TotalHours < 0)
+                return BadRequest("Указано неверное время работы");
+
             var rest = restaurantService.GetByOwnerEmail(User.Identity!.Name!);
 
             if (rest == null)

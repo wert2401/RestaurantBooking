@@ -11,5 +11,10 @@ namespace RestaurantBooking.Api.Models.Restaurant
         public List<string>? PhoneNumbers { get; set; }
         [Required]
         public string Address { get; set; } = null!;
+
+        [Required]
+        public TimeSpan OpenFrom { get; set; }
+        [Required]
+        public TimeSpan OpenTo { get; set; }
     }
 }

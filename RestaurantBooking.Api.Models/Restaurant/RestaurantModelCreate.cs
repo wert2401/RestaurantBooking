@@ -15,5 +15,10 @@ namespace RestaurantBooking.Api.Models.Restaurant
         [Required]
         [MaxLength(500)]
         public string Address { get; set; } = null!;
+
+        [Required]
+        public TimeSpan OpenFrom { get; set; }
+        [Required]
+        public TimeSpan OpenTo { get; set; }
     }
 }
