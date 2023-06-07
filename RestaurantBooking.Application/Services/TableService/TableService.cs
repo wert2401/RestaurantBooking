@@ -51,10 +51,8 @@ namespace RestaurantBooking.Application.Services.TableService
 
             dbContext.Entry(table).Collection(t => t.TableClaims).Load();
 
-            var hasClaimedBefore = table.TableClaims.Where(x => x.UserId == user.Id && !x.IsCanceled).ToList().Any(c => !c.IsExpired);
-
-            if (hasClaimedBefore)
-                throw new InvalidOperationException("User has claimed this table before");
+            if (table.IsClaimed)
+                throw new InvalidOperationException("Table was already claimed");
 
             var rest = dbContext.Restaurants.Find(table.RestaurantId);
 
