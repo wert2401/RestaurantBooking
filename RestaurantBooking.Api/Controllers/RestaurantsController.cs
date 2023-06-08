@@ -82,6 +82,7 @@ namespace RestaurantBooking.Api.Controllers
         }
 
         [HttpPost("ChangeImage")]
+        [Consumes("multipart/form-data")]
         [Authorize(Roles = "Admin")]
         public IActionResult ChangeImage(IFormFile image)
         {
