@@ -15,11 +15,13 @@ namespace RestaurantBooking.Api.Controllers
     public class UserController : ControllerBase
     {
         private readonly IUserService userService;
+        private readonly IRestaurantService restaurantService;
         private readonly IMapper mapper;
 
         public UserController(IUserService userService, IRestaurantService restaurantService, IMapper mapper)
         {
             this.userService = userService;
+            this.restaurantService = restaurantService;
             this.mapper = mapper;
         }
 
@@ -60,6 +62,13 @@ namespace RestaurantBooking.Api.Controllers
         {
             var userId = userService.GetByEmail(User.Identity!.Name!).Id;
             return Ok(mapper.Map<ICollection<RestaurantModel>>(userService.GetFavoritesbyUserId(userId)));
+        }
+
+        [HttpGet("Restaurant")]
+        [Authorize(Roles = "Admin")]
+        public ActionResult<RestaurantModelDetailed> GetRestaurant()
+        {
+            return mapper.Map<RestaurantModelDetailed>(restaurantService.GetByOwnerEmail(User.Identity!.Name!));
         }
 
         [HttpPost("AddToFavorites")]
