@@ -12,9 +12,9 @@ namespace RestaurantBooking.Application.Services.RoleService
             this.dbContext = dbContext;
         }
 
-        public Role? GetRoleByName(string roleName)
+        public Role GetRoleByName(string roleName)
         {
-            return dbContext.Roles.FirstOrDefault(r => r.Name == roleName);
+            return dbContext.Roles.FirstOrDefault(r => r.Name == roleName) ?? throw new Exception("Role with given name was not found");
         }
     }
 }

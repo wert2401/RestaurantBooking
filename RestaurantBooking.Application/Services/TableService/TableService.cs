@@ -39,25 +39,16 @@ namespace RestaurantBooking.Application.Services.TableService
 
         public void ClaimTable(TableClaim tableClaim, string userEmail)
         {
-            var user = userService.GetByEmail(userEmail);
+            var user = userService.GetByEmail(userEmail) ?? throw new InvalidOperationException("User with the given email does not exist");
 
-            if (user == null) 
-                throw new InvalidOperationException("User with the given email does not exist");
-
-            Table? table = dbContext.Tables.Find(tableClaim.TableId);
-
-            if (table == null) 
-                throw new InvalidOperationException("Table with the given id does not exist");
+            Table? table = dbContext.Tables.Find(tableClaim.TableId) ?? throw new InvalidOperationException("Table with the given id does not exist");
 
             dbContext.Entry(table).Collection(t => t.TableClaims).Load();
 
             if (table.IsClaimed)
                 throw new InvalidOperationException("Table was already claimed");
 
-            var rest = dbContext.Restaurants.Find(table.RestaurantId);
-
-            if (rest == null)
-                throw new InvalidOperationException("Table with the given id was not found");
+            var rest = dbContext.Restaurants.Find(table.RestaurantId) ?? throw new InvalidOperationException("Table with the given id was not found");
 
             if (tableClaim.ClaimFromDate.TimeOfDay < rest.OpenFrom || tableClaim.ClaimToDate.TimeOfDay > rest.OpenTo)
                 throw new InvalidOperationException("Time for claiming is wrong. Work time of restaurant does not fit with the claimed time");
@@ -72,10 +63,7 @@ namespace RestaurantBooking.Application.Services.TableService
 
         public void UnclaimTable(int tableClaimId)
         {
-            var tableClaim = dbContext.TableClaims.Find(tableClaimId);
-
-            if (tableClaim == null)
-                throw new InvalidOperationException("Table claim with the given id was not found");
+            var tableClaim = dbContext.TableClaims.Find(tableClaimId) ?? throw new InvalidOperationException("Table claim with the given id was not found");
 
             tableClaim.IsCanceled = true;
 

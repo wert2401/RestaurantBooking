@@ -20,15 +20,13 @@ namespace RestaurantBooking.Api.Controllers
         private readonly IUserService userService;
         private readonly IImageService imageService;
         private readonly IMapper mapper;
-        private readonly ILogger logger;
 
-        public RestaurantsController(IRestaurantService restaurantService, IUserService userService, IImageService imageService, IMapper mapper, ILogger<RestaurantsController> logger)
+        public RestaurantsController(IRestaurantService restaurantService, IUserService userService, IImageService imageService, IMapper mapper)
         {
             this.restaurantService = restaurantService;
             this.userService = userService;
             this.imageService = imageService;
             this.mapper = mapper;
-            this.logger = logger;
         }
 
         [HttpGet]

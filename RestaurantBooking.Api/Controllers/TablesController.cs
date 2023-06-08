@@ -47,16 +47,14 @@ namespace RestaurantBooking.Api.Controllers
         [Authorize(Roles = "Admin")]
         public IQueryable<TableClaimModel> GetClaimsByRestaurant()
         {
-            var restautant = restaurantService.GetByOwnerEmail(User.Identity!.Name!);
-            return restautant.Tables.Select(t => t.TableClaims).AsQueryable().ProjectTo<TableClaimModel>(mapper.ConfigurationProvider);
+            var restaurant = restaurantService.GetByOwnerEmail(User.Identity!.Name!);
+            return restaurant.Tables.Select(t => t.TableClaims).AsQueryable().ProjectTo<TableClaimModel>(mapper.ConfigurationProvider);
         }
 
         [HttpPost("Claim")]
         [Authorize]
         public IActionResult ClaimTable(TableClaimRequestModel tableClaimRequest)
         {
-            var user = userService.GetByEmail(User.Identity?.Name!);
-
             var tableClaim = mapper.Map<TableClaim>(tableClaimRequest);
             tableService.ClaimTable(tableClaim, User.Identity!.Name!);
             return Ok();
@@ -64,9 +62,9 @@ namespace RestaurantBooking.Api.Controllers
 
         [HttpPost("Unclaim")]
         [Authorize]
-        public IActionResult UnclaimTable([FromBody(EmptyBodyBehavior = Microsoft.AspNetCore.Mvc.ModelBinding.EmptyBodyBehavior.Disallow)] int tableClaimid)
+        public IActionResult UnclaimTable([FromBody(EmptyBodyBehavior = Microsoft.AspNetCore.Mvc.ModelBinding.EmptyBodyBehavior.Disallow)] int tableClaimId)
         {
-            var claim = tableService.GetTableClaimById(tableClaimid);
+            var claim = tableService.GetTableClaimById(tableClaimId);
             var user = userService.GetByEmail(User.Identity!.Name!);
 
             if (claim == null)
@@ -75,7 +73,7 @@ namespace RestaurantBooking.Api.Controllers
             if (claim.UserId !=  user.Id)
                 return Unauthorized();
 
-            tableService.UnclaimTable(tableClaimid);
+            tableService.UnclaimTable(tableClaimId);
             return Ok();
         }
     }

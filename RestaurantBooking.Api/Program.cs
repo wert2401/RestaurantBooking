@@ -77,7 +77,7 @@ namespace RestaurantBooking.Api
                                 Id="Bearer"
                             }
                         },
-                        new string[]{}
+                        Array.Empty<string>()
                     }
                 });
             });

@@ -22,9 +22,7 @@ namespace RestaurantBooking.Application.Services.UserService
 
         public User GetByEmail(string email)
         {
-            var user = getByEmail(email);
-            if (user == null)
-                throw new Exception("User was not found");
+            var user = getByEmail(email) ?? throw new Exception("User was not found");
             return user;
         }
 
@@ -35,11 +33,7 @@ namespace RestaurantBooking.Application.Services.UserService
 
         public void Patch(User editModel)
         {
-            User? user = getByEmail(editModel.Email);
-
-            if (user == null)
-                throw new InvalidOperationException("Patch user error: user does not exist");
-
+            User user = getByEmail(editModel.Email) ?? throw new InvalidOperationException("Patch user error: user does not exist");
             user.Phone = editModel.Phone;
             user.Name = editModel.Name;
 
@@ -51,11 +45,7 @@ namespace RestaurantBooking.Application.Services.UserService
 
         public void ChangePassword(string email, string password)
         {
-            User? user = getByEmail(email);
-
-            if (user == null)
-                throw new InvalidOperationException("Change password error: user does not exist");
-
+            User user = getByEmail(email) ?? throw new InvalidOperationException("Change password error: user does not exist");
             user.PasswordHash = BCrypt.Net.BCrypt.HashPassword(password);
 
             user.Roles = new List<Role>();
@@ -77,16 +67,8 @@ namespace RestaurantBooking.Application.Services.UserService
 
         public void AddToFavorites(int userId, int restaurantId)
         {
-            var rest = dbContext.Restaurants.Find(restaurantId);
-
-            if (rest == null)
-                throw new Exception("Restaurant was not found");
-
-            var user = dbContext.Users.Include(u => u.FavoriteRestaurants).First(u => u.Id == userId);
-
-            if (user == null)
-                throw new Exception("user was not found");
-
+            var rest = dbContext.Restaurants.Find(restaurantId) ?? throw new Exception("Restaurant was not found");
+            var user = dbContext.Users.Include(u => u.FavoriteRestaurants).First(u => u.Id == userId) ?? throw new Exception("user was not found");
             if (user.FavoriteRestaurants.Any(r => r.Id == restaurantId))
                 throw new Exception("User has already favorited this restaurant");
 
@@ -97,16 +79,8 @@ namespace RestaurantBooking.Application.Services.UserService
 
         public void RemoveFromFavorites(int userId, int restaurantId)
         {
-            var user = dbContext.Users.Include(u => u.FavoriteRestaurants).First(u => u.Id == userId);
-
-            if (user == null)
-                throw new Exception("user was not found");
-
-            var rest = user.FavoriteRestaurants.Find(r => r.Id == restaurantId);
-
-            if (rest == null)
-                throw new Exception("Restaurant was not found");
-
+            var user = dbContext.Users.Include(u => u.FavoriteRestaurants).First(u => u.Id == userId) ?? throw new Exception("user was not found");
+            var rest = user.FavoriteRestaurants.Find(r => r.Id == restaurantId) ?? throw new Exception("Restaurant was not found");
             user.FavoriteRestaurants.Remove(rest);
 
             dbContext.SaveChanges();
@@ -114,11 +88,7 @@ namespace RestaurantBooking.Application.Services.UserService
 
         public void SetRefreshToken(int id, string refreshToken, DateTime expiringTime)
         {
-            User? user = dbContext.Users.Find(id);
-
-            if (user == null)
-                throw new InvalidOperationException("Refresh token error: user does not exist");
-
+            var user = dbContext.Users.Find(id) ?? throw new InvalidOperationException("Refresh token error: user does not exist");
             user.RefreshToken = refreshToken;
             user.RefreshTokenExpiring = expiringTime;
 
@@ -128,11 +98,7 @@ namespace RestaurantBooking.Application.Services.UserService
 
         public void SetRefreshToken(string email, string refreshToken, DateTime expiringTime)
         {
-            User? user = getByEmail(email);
-
-            if (user == null)
-                throw new InvalidOperationException("Refresh token error: user does not exist");
-
+            var user = getByEmail(email) ?? throw new InvalidOperationException("Refresh token error: user does not exist");
             user.RefreshToken = refreshToken;
             user.RefreshTokenExpiring = expiringTime;
 
@@ -142,11 +108,7 @@ namespace RestaurantBooking.Application.Services.UserService
 
         public bool HasUserRestaurant(int id)
         {
-            var user = dbContext.Users.Find(id);
-
-            if (user == null)
-                throw new Exception("User was not found");
-
+            var user = dbContext.Users.Find(id) ?? throw new Exception("User was not found");
             return dbContext.Restaurants.Any(r => r.OwnerUserId == user.Id);
         }
 
