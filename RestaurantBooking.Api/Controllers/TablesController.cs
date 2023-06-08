@@ -51,19 +51,6 @@ namespace RestaurantBooking.Api.Controllers
             return restautant.Tables.Select(t => t.TableClaims).AsQueryable().ProjectTo<TableClaimModel>(mapper.ConfigurationProvider);
         }
 
-        [HttpPost]
-        [Authorize(Roles = "Admin")]
-        public IActionResult Post(TableModelCreate modelCreate)
-        {
-            var restaurant = restaurantService.GetByOwnerEmail(User?.Identity?.Name!);
-
-            if (restaurant == null)
-                return Unauthorized();
-
-            tableService.Add(restaurant.Id, mapper.Map<Table>(modelCreate));
-            return Ok();
-        }
-
         [HttpPost("Claim")]
         [Authorize]
         public IActionResult ClaimTable(TableClaimRequestModel tableClaimRequest)
