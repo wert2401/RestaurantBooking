@@ -12,7 +12,7 @@ namespace RestaurantBooking.Data.Entities
         [Required]
         public int OwnerUserId { get; set; }
         public string? SchemeImage { get; set; }
-        public List<string>? PhoneNumbers { get; set; }
+        public string? PhoneNumber { get; set; }
         [Required]
         [MaxLength(500)]
         public string Address { get; set; } = null!;

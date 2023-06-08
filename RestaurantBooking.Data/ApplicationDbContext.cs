@@ -24,13 +24,6 @@ namespace RestaurantBooking.Data
                 entity.Navigation(e => e.Roles).AutoInclude();
             });
 
-            modelBuilder.Entity<Restaurant>(entity =>
-            {
-                entity.Property(p => p.PhoneNumbers).HasConversion(
-                    v => JsonSerializer.Serialize(v, null as JsonSerializerOptions),
-                    v => JsonSerializer.Deserialize<List<string>>(v, null as JsonSerializerOptions));
-            });
-
             SeedRoles(modelBuilder);
             SeedUsers(modelBuilder);
             SeedRoleUser(modelBuilder);
@@ -69,8 +62,8 @@ namespace RestaurantBooking.Data
         {
             modelBuilder.Entity<Restaurant>().HasData(new[]
             {
-                new Restaurant { Id = 1, OwnerUserId = 1, Name = "Test rest", Description = "Owner is owner 1", Address = "Test address", PhoneNumbers = new() { "+79991112233", "+79991112233" }, TablesCount = 3 },
-                new Restaurant { Id = 2, OwnerUserId = 2, Name = "Test rest2", Description = "Owner is owner 2", Address = "Test address2", PhoneNumbers = new() { "+79991112233", "+79991112233" }, TablesCount = 3 }
+                new Restaurant { Id = 1, OwnerUserId = 1, Name = "Test rest", Description = "Owner is owner 1", Address = "Test address", PhoneNumber = "+79991112233", TablesCount = 3 },
+                new Restaurant { Id = 2, OwnerUserId = 2, Name = "Test rest2", Description = "Owner is owner 2", Address = "Test address2", PhoneNumber = "+79991112233", TablesCount = 3 }
             });
         }
 
