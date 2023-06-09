@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.OData.Query;
 using RestaurantBooking.Api.Models.Restaurant;
 using RestaurantBooking.Api.Models.Review;
+using RestaurantBooking.Api.Services;
 using RestaurantBooking.Application.Services.ImagesService;
 using RestaurantBooking.Application.Services.RestaurantService;
 using RestaurantBooking.Application.Services.UserService;
@@ -20,26 +21,28 @@ namespace RestaurantBooking.Api.Controllers
         private readonly IUserService userService;
         private readonly IImageService imageService;
         private readonly IMapper mapper;
+        private readonly IUriService uriService;
 
-        public RestaurantsController(IRestaurantService restaurantService, IUserService userService, IImageService imageService, IMapper mapper)
+        public RestaurantsController(IRestaurantService restaurantService, IUserService userService, IImageService imageService, IMapper mapper, IUriService uriService)
         {
             this.restaurantService = restaurantService;
             this.userService = userService;
             this.imageService = imageService;
             this.mapper = mapper;
+            this.uriService = uriService;
         }
 
         [HttpGet]
         [EnableQuery]
         public IQueryable<RestaurantModel> Get()
         {
-            return restaurantService.GetAll().ToList().AsQueryable().ProjectTo<RestaurantModel>(mapper.ConfigurationProvider);
+            return restaurantService.GetAll().ToList().AsQueryable().ProjectTo<RestaurantModel>(mapper.ConfigurationProvider, new { serverUri = uriService.GetUri() });
         }
 
         [HttpGet("Details")]
         public ActionResult<RestaurantModelDetailed> Get(int id)
         {
-            return Ok(mapper.Map<RestaurantModelDetailed>(restaurantService.GetById(id)));
+            return Ok(mapper.Map<RestaurantModelDetailed>(restaurantService.GetById(id), opts => opts.Items["serverUri"] = uriService.GetUri()));
         }
 
         [HttpPatch]

@@ -1,8 +1,10 @@
 ﻿using AutoMapper;
+using AutoMapper.QueryableExtensions;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using RestaurantBooking.Api.Models.Restaurant;
 using RestaurantBooking.Api.Models.User;
+using RestaurantBooking.Api.Services;
 using RestaurantBooking.Application.Services.RestaurantService;
 using RestaurantBooking.Application.Services.UserService;
 using RestaurantBooking.Data.Entities;
@@ -17,12 +19,14 @@ namespace RestaurantBooking.Api.Controllers
         private readonly IUserService userService;
         private readonly IRestaurantService restaurantService;
         private readonly IMapper mapper;
+        private readonly IUriService uriService;
 
-        public UserController(IUserService userService, IRestaurantService restaurantService, IMapper mapper)
+        public UserController(IUserService userService, IRestaurantService restaurantService, IMapper mapper, IUriService uriService)
         {
             this.userService = userService;
             this.restaurantService = restaurantService;
             this.mapper = mapper;
+            this.uriService = uriService;
         }
 
         [HttpGet]
@@ -61,14 +65,14 @@ namespace RestaurantBooking.Api.Controllers
         public ActionResult<ICollection<RestaurantModel>> GetFavorites()
         {
             var userId = userService.GetByEmail(User.Identity!.Name!).Id;
-            return Ok(mapper.Map<ICollection<RestaurantModel>>(userService.GetFavoritesbyUserId(userId)));
+            return Ok(userService.GetFavoritesbyUserId(userId).AsQueryable().ProjectTo<RestaurantModel>(mapper.ConfigurationProvider, new { serverUri = uriService.GetUri() }));
         }
 
         [HttpGet("Restaurant")]
         [Authorize(Roles = "Admin")]
         public ActionResult<RestaurantModelDetailed> GetRestaurant()
         {
-            return mapper.Map<RestaurantModelDetailed>(restaurantService.GetByOwnerEmail(User.Identity!.Name!));
+            return mapper.Map<RestaurantModelDetailed>(restaurantService.GetByOwnerEmail(User.Identity!.Name!), opts => opts.Items["serverUri"] = uriService.GetUri());
         }
 
         [HttpPost("AddToFavorites")]

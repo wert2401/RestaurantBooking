@@ -4,6 +4,7 @@ using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using RestaurantBooking.Api.Middlewares;
 using RestaurantBooking.Api.Models;
+using RestaurantBooking.Api.Services;
 using RestaurantBooking.Application;
 using System.Text;
 
@@ -42,6 +43,7 @@ namespace RestaurantBooking.Api
             builder.Services.AddControllers()
                 .AddOData(o => o.OrderBy().Filter().Select());
 
+            builder.Services.AddSingleton<IUriService,  UriService>();
             builder.Services.AddModels();
             builder.Services.AddApplication(builder.Configuration);
 

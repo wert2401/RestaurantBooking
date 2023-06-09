@@ -364,3 +364,4 @@ FodyWeavers.xsd
 /RestaurantBooking.Api/RestaurantBooking.db-shm
 /RestaurantBooking.Api/RestaurantBooking.db-wal
 /RestaurantBooking.Api/RestaurantBooking.db
+/RestaurantBooking.Api/wwwroot/Images
