@@ -1,5 +1,6 @@
 ﻿using System;
 using Microsoft.EntityFrameworkCore.Migrations;
+using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 #nullable disable
 
@@ -17,14 +18,17 @@ namespace RestaurantBooking.Data.Migrations
                 name: "Restaurants",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "INTEGER", nullable: false)
-                        .Annotation("Sqlite:Autoincrement", true),
-                    Name = table.Column<string>(type: "TEXT", maxLength: 200, nullable: false),
-                    Description = table.Column<string>(type: "TEXT", nullable: false),
-                    OwnerUserId = table.Column<int>(type: "INTEGER", nullable: false),
-                    MainPhoto = table.Column<string>(type: "TEXT", nullable: true),
-                    PhoneNumbers = table.Column<string>(type: "TEXT", nullable: true),
-                    Address = table.Column<string>(type: "TEXT", maxLength: 500, nullable: false)
+                    Id = table.Column<int>(type: "integer", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    Name = table.Column<string>(type: "character varying(200)", maxLength: 200, nullable: false),
+                    Description = table.Column<string>(type: "text", nullable: false),
+                    OwnerUserId = table.Column<int>(type: "integer", nullable: false),
+                    SchemeImage = table.Column<string>(type: "text", nullable: true),
+                    PhoneNumber = table.Column<string>(type: "text", nullable: true),
+                    Address = table.Column<string>(type: "character varying(500)", maxLength: 500, nullable: false),
+                    OpenFrom = table.Column<TimeSpan>(type: "interval", nullable: false),
+                    OpenTo = table.Column<TimeSpan>(type: "interval", nullable: false),
+                    TablesCount = table.Column<int>(type: "integer", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -35,10 +39,10 @@ namespace RestaurantBooking.Data.Migrations
                 name: "Roles",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "INTEGER", nullable: false)
-                        .Annotation("Sqlite:Autoincrement", true),
-                    Name = table.Column<string>(type: "TEXT", maxLength: 30, nullable: false),
-                    Description = table.Column<string>(type: "TEXT", maxLength: 100, nullable: true)
+                    Id = table.Column<int>(type: "integer", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    Name = table.Column<string>(type: "character varying(30)", maxLength: 30, nullable: false),
+                    Description = table.Column<string>(type: "character varying(100)", maxLength: 100, nullable: true)
                 },
                 constraints: table =>
                 {
@@ -49,14 +53,14 @@ namespace RestaurantBooking.Data.Migrations
                 name: "Users",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "INTEGER", nullable: false)
-                        .Annotation("Sqlite:Autoincrement", true),
-                    Name = table.Column<string>(type: "TEXT", maxLength: 200, nullable: true),
-                    Email = table.Column<string>(type: "TEXT", maxLength: 100, nullable: false),
-                    PasswordHash = table.Column<string>(type: "TEXT", maxLength: 128, nullable: false),
-                    Phone = table.Column<string>(type: "TEXT", maxLength: 50, nullable: true),
-                    RefreshToken = table.Column<string>(type: "TEXT", nullable: true),
-                    RefreshTokenExpiring = table.Column<DateTime>(type: "TEXT", nullable: false)
+                    Id = table.Column<int>(type: "integer", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    Name = table.Column<string>(type: "character varying(200)", maxLength: 200, nullable: true),
+                    Email = table.Column<string>(type: "character varying(100)", maxLength: 100, nullable: false),
+                    PasswordHash = table.Column<string>(type: "character varying(128)", maxLength: 128, nullable: false),
+                    Phone = table.Column<string>(type: "character varying(50)", maxLength: 50, nullable: true),
+                    RefreshToken = table.Column<string>(type: "text", nullable: true),
+                    RefreshTokenExpiring = table.Column<DateTime>(type: "timestamp with time zone", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -67,13 +71,10 @@ namespace RestaurantBooking.Data.Migrations
                 name: "Tables",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "INTEGER", nullable: false)
-                        .Annotation("Sqlite:Autoincrement", true),
-                    TableNumber = table.Column<int>(type: "INTEGER", nullable: false),
-                    RestaurantId = table.Column<int>(type: "INTEGER", nullable: false),
-                    Capacity = table.Column<int>(type: "INTEGER", nullable: false),
-                    PositionX = table.Column<double>(type: "REAL", nullable: false),
-                    PositionY = table.Column<double>(type: "REAL", nullable: false)
+                    Id = table.Column<int>(type: "integer", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    TableNumber = table.Column<int>(type: "integer", nullable: false),
+                    RestaurantId = table.Column<int>(type: "integer", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -90,8 +91,8 @@ namespace RestaurantBooking.Data.Migrations
                 name: "RestaurantUser",
                 columns: table => new
                 {
-                    FavoriteRestaurantsId = table.Column<int>(type: "INTEGER", nullable: false),
-                    FavoritedById = table.Column<int>(type: "INTEGER", nullable: false)
+                    FavoriteRestaurantsId = table.Column<int>(type: "integer", nullable: false),
+                    FavoritedById = table.Column<int>(type: "integer", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -114,11 +115,11 @@ namespace RestaurantBooking.Data.Migrations
                 name: "Review",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "INTEGER", nullable: false)
-                        .Annotation("Sqlite:Autoincrement", true),
-                    Grade = table.Column<int>(type: "INTEGER", nullable: false),
-                    UserId = table.Column<int>(type: "INTEGER", nullable: false),
-                    RestaurantId = table.Column<int>(type: "INTEGER", nullable: false)
+                    Id = table.Column<int>(type: "integer", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    Grade = table.Column<int>(type: "integer", nullable: false),
+                    UserId = table.Column<int>(type: "integer", nullable: false),
+                    RestaurantId = table.Column<int>(type: "integer", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -141,8 +142,8 @@ namespace RestaurantBooking.Data.Migrations
                 name: "RoleUser",
                 columns: table => new
                 {
-                    RolesId = table.Column<int>(type: "INTEGER", nullable: false),
-                    UsersId = table.Column<int>(type: "INTEGER", nullable: false)
+                    RolesId = table.Column<int>(type: "integer", nullable: false),
+                    UsersId = table.Column<int>(type: "integer", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -165,13 +166,14 @@ namespace RestaurantBooking.Data.Migrations
                 name: "TableClaims",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "INTEGER", nullable: false)
-                        .Annotation("Sqlite:Autoincrement", true),
-                    TableId = table.Column<int>(type: "INTEGER", nullable: false),
-                    UserId = table.Column<int>(type: "INTEGER", nullable: false),
-                    IsExpired = table.Column<bool>(type: "INTEGER", nullable: false),
-                    CreatedDate = table.Column<DateTime>(type: "TEXT", nullable: false),
-                    ClaimDate = table.Column<DateTime>(type: "TEXT", nullable: false)
+                    Id = table.Column<int>(type: "integer", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    TableId = table.Column<int>(type: "integer", nullable: false),
+                    UserId = table.Column<int>(type: "integer", nullable: false),
+                    IsCanceled = table.Column<bool>(type: "boolean", nullable: false),
+                    CreatedDate = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
+                    ClaimFromDate = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
+                    ClaimToDate = table.Column<DateTime>(type: "timestamp with time zone", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -192,11 +194,11 @@ namespace RestaurantBooking.Data.Migrations
 
             migrationBuilder.InsertData(
                 table: "Restaurants",
-                columns: new[] { "Id", "Address", "Description", "MainPhoto", "Name", "OwnerUserId", "PhoneNumbers" },
+                columns: new[] { "Id", "Address", "Description", "Name", "OpenFrom", "OpenTo", "OwnerUserId", "PhoneNumber", "SchemeImage", "TablesCount" },
                 values: new object[,]
                 {
-                    { 1, "Test address", "Owner is owner 1", null, "Test rest", 1, "[\"\\u002B79991112233\",\"\\u002B79991112233\"]" },
-                    { 2, "Test address2", "Owner is owner 2", null, "Test rest2", 2, "[\"\\u002B79991112233\",\"\\u002B79991112233\"]" }
+                    { 1, "Test address", "Owner is owner 1", "Test rest", new TimeSpan(0, 0, 0, 0, 0), new TimeSpan(0, 0, 0, 0, 0), 1, "+79991112233", null, 3 },
+                    { 2, "Test address2", "Owner is owner 2", "Test rest2", new TimeSpan(0, 0, 0, 0, 0), new TimeSpan(0, 0, 0, 0, 0), 2, "+79991112233", null, 3 }
                 });
 
             migrationBuilder.InsertData(
@@ -230,15 +232,15 @@ namespace RestaurantBooking.Data.Migrations
 
             migrationBuilder.InsertData(
                 table: "Tables",
-                columns: new[] { "Id", "Capacity", "PositionX", "PositionY", "RestaurantId", "TableNumber" },
+                columns: new[] { "Id", "RestaurantId", "TableNumber" },
                 values: new object[,]
                 {
-                    { 1, 4, 0.0, 0.0, 1, 1 },
-                    { 2, 3, 0.0, 0.0, 1, 2 },
-                    { 3, 3, 0.0, 0.0, 1, 3 },
-                    { 4, 14, 0.0, 0.0, 2, 1 },
-                    { 5, 13, 0.0, 0.0, 2, 2 },
-                    { 6, 13, 0.0, 0.0, 2, 3 }
+                    { 1, 1, 1 },
+                    { 2, 1, 2 },
+                    { 3, 1, 3 },
+                    { 4, 2, 1 },
+                    { 5, 2, 2 },
+                    { 6, 2, 3 }
                 });
 
             migrationBuilder.CreateIndex(
