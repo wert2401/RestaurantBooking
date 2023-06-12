@@ -1,5 +1,4 @@
-﻿using RestaurantBooking.Api.Models.Table;
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
 
 namespace RestaurantBooking.Api.Models.Restaurant
 {
@@ -11,6 +10,7 @@ namespace RestaurantBooking.Api.Models.Restaurant
         public string Description { get; set; } = null!;
         [Required]
         public int OwnerUserId { get; set; }
+        public string? MenuPath { get; set; }
         public string? SchemeImage { get; set; }
         public string? PhoneNumber { get; set; }
         [Required]

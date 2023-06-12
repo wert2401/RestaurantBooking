@@ -1,6 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using RestaurantBooking.Data.Entities;
-using System.Text.Json;
 
 namespace RestaurantBooking.Data
 {

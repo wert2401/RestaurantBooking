@@ -2,7 +2,7 @@
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using RestaurantBooking.Application.Services.Authentication;
-using RestaurantBooking.Application.Services.ImagesService;
+using RestaurantBooking.Application.Services.FilesService;
 using RestaurantBooking.Application.Services.RestaurantService;
 using RestaurantBooking.Application.Services.RoleService;
 using RestaurantBooking.Application.Services.TableService;
@@ -23,7 +23,7 @@ namespace RestaurantBooking.Application
             });
 
             services.Configure<JwtOptions>(configuration.GetSection("JWT"));
-            services.Configure<ImageOptions>(configuration.GetSection("Images"));
+            services.Configure<Services.FilesService.FileOptions>(configuration.GetSection("FilePaths"));
 
             services.AddScoped<IAuthenticationService, AuthenticationService>();
 
@@ -32,7 +32,7 @@ namespace RestaurantBooking.Application
             services.AddScoped<IUserService, UserService>();
             services.AddScoped<IRoleService, RoleService>();
 
-            services.AddScoped<IImageService, ImageService>();
+            services.AddScoped<IFileService, FileService>();
 
             return services;
         }

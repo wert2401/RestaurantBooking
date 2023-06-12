@@ -6,7 +6,7 @@ using Microsoft.AspNetCore.OData.Query;
 using RestaurantBooking.Api.Models.Restaurant;
 using RestaurantBooking.Api.Models.Review;
 using RestaurantBooking.Api.Services;
-using RestaurantBooking.Application.Services.ImagesService;
+using RestaurantBooking.Application.Services.FilesService;
 using RestaurantBooking.Application.Services.RestaurantService;
 using RestaurantBooking.Application.Services.UserService;
 using RestaurantBooking.Data.Entities;
@@ -19,11 +19,11 @@ namespace RestaurantBooking.Api.Controllers
     {
         private readonly IRestaurantService restaurantService;
         private readonly IUserService userService;
-        private readonly IImageService imageService;
+        private readonly IFileService imageService;
         private readonly IMapper mapper;
         private readonly IUriService uriService;
 
-        public RestaurantsController(IRestaurantService restaurantService, IUserService userService, IImageService imageService, IMapper mapper, IUriService uriService)
+        public RestaurantsController(IRestaurantService restaurantService, IUserService userService, IFileService imageService, IMapper mapper, IUriService uriService)
         {
             this.restaurantService = restaurantService;
             this.userService = userService;
@@ -85,10 +85,13 @@ namespace RestaurantBooking.Api.Controllers
         }
 
         [HttpPost("ChangeImage")]
-        [Consumes("multipart/form-data")]
         [Authorize(Roles = "Admin")]
         public IActionResult ChangeImage(IFormFile image)
         {
+            if (image.ContentType is not ("image/png" or "image/jpeg"))
+                return BadRequest("Wrong type of uploading file");
+
+
             var rest = restaurantService.GetByOwnerEmail(User.Identity!.Name!);
 
             if (rest == null)
@@ -101,6 +104,27 @@ namespace RestaurantBooking.Api.Controllers
             restaurantService.Patch(rest, rest);
 
             return Ok(new { NewImgUrl = pathToImage });
+        }
+
+        [HttpPost("ChangeMenu")]
+        [Authorize(Roles = "Admin")]
+        public IActionResult ChangeMenu(IFormFile menu)
+        {
+            if (menu.ContentType is not "application/pdf")
+                return BadRequest("Wrong type of uploading file");
+
+            var rest = restaurantService.GetByOwnerEmail(User.Identity!.Name!);
+
+            if (rest == null)
+                return Unauthorized();
+
+            string pathToMenu = imageService.SaveMenu(menu);
+
+            rest.MenuPath = pathToMenu;
+
+            restaurantService.Patch(rest, rest);
+
+            return Ok(new { NewMenuUrl = pathToMenu });
         }
 
         [HttpPost("Grade")]

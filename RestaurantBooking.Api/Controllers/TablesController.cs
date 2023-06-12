@@ -70,7 +70,7 @@ namespace RestaurantBooking.Api.Controllers
             if (claim == null)
                 return BadRequest("Table claim was not found");
 
-            if (claim.UserId !=  user.Id)
+            if (claim.UserId != user.Id)
                 return Unauthorized();
 
             tableService.UnclaimTable(tableClaimId);

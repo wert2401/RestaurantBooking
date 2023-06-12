@@ -43,7 +43,7 @@ namespace RestaurantBooking.Api
             builder.Services.AddControllers()
                 .AddOData(o => o.OrderBy().Filter().Select());
 
-            builder.Services.AddSingleton<IUriService,  UriService>();
+            builder.Services.AddSingleton<IUriService, UriService>();
             builder.Services.AddModels();
             builder.Services.AddApplication(builder.Configuration);
 
