@@ -11,6 +11,7 @@ namespace RestaurantBooking.Data.Entities
         public string Description { get; set; } = null!;
         [Required]
         public int OwnerUserId { get; set; }
+        public string? MenuPath { get; set; }
         public string? SchemeImage { get; set; }
         public string? PhoneNumber { get; set; }
         [Required]

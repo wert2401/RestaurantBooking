@@ -5,7 +5,7 @@
         public int TableId { get; set; }
         public int UserId { get; set; }
         public bool IsExpired => DateTime.UtcNow > ClaimToDate;
-        public bool IsCanceled {  get; set; }
+        public bool IsCanceled { get; set; }
         public DateTime CreatedDate { get; set; }
         public DateTime ClaimFromDate { get; set; }
         public DateTime ClaimToDate { get; set; }

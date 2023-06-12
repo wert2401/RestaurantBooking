@@ -114,6 +114,6 @@ namespace RestaurantBooking.Application.Services.UserService
 
         private User? getByEmail(string email) => dbContext.Users.AsNoTracking().FirstOrDefault(u => u.Email == email);
 
-        
+
     }
 }
