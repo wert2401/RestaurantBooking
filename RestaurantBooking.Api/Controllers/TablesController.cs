@@ -48,7 +48,7 @@ namespace RestaurantBooking.Api.Controllers
         public IQueryable<TableClaimModel> GetClaimsByRestaurant()
         {
             var restaurant = restaurantService.GetByOwnerEmail(User.Identity!.Name!);
-            return restaurant.Tables.Select(t => t.TableClaims).AsQueryable().ProjectTo<TableClaimModel>(mapper.ConfigurationProvider);
+            return tableService.GetAllClaims().Where(x => x.Table.RestaurantId == restaurant.Id).ProjectTo<TableClaimModel>(mapper.ConfigurationProvider);
         }
 
         [HttpPost("Claim")]

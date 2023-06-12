@@ -29,7 +29,10 @@ namespace RestaurantBooking.Application.Services.TableService
 
         public IQueryable<TableClaim> GetAllClaims()
         {
-            return dbContext.TableClaims.AsNoTracking();
+            return dbContext.TableClaims
+                .Include(t => t.Table.Restaurant)
+                .Include(t => t.User)
+                .AsNoTracking();
         }
 
         public TableClaim? GetTableClaimById(int tableClaimId)
