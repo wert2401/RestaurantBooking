@@ -24,7 +24,7 @@ namespace RestaurantBooking.Api.Models
                     if (d.SchemeImage is not null)
                         d.SchemeImage = (string)uri + d.SchemeImage;
                     if (d.MenuPath is not null)
-                        d.MenuPath = (string)uri + d.SchemeImage;
+                        d.MenuPath = (string)uri + d.MenuPath;
                 }
             });
 
