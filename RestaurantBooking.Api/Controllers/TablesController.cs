@@ -65,13 +65,23 @@ namespace RestaurantBooking.Api.Controllers
         public IActionResult UnclaimTable([FromBody(EmptyBodyBehavior = Microsoft.AspNetCore.Mvc.ModelBinding.EmptyBodyBehavior.Disallow)] int tableClaimId)
         {
             var claim = tableService.GetTableClaimById(tableClaimId);
-            var user = userService.GetByEmail(User.Identity!.Name!);
 
             if (claim == null)
                 return BadRequest("Table claim was not found");
 
-            if (claim.UserId != user.Id)
-                return Unauthorized();
+            var user = userService.GetByEmail(User.Identity!.Name!);
+
+            if (user.Roles[0].Name == "Admin")
+            {
+                var rest = restaurantService.GetByOwnerEmail(User?.Identity!.Name!);
+                if (!rest.Tables.Any(t => t.Id == claim.TableId))
+                    return Unauthorized();
+            }
+            else
+            {
+                if (claim.UserId != user.Id)
+                    return Unauthorized();
+            }
 
             tableService.UnclaimTable(tableClaimId);
             return Ok();
