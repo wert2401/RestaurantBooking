@@ -10,13 +10,11 @@ namespace RestaurantBooking.Api.Controllers
     [Route("[controller]/[action]")]
     public class AuthenticationController : ControllerBase
     {
-        private readonly ILogger<AuthenticationController> _logger;
         private readonly IAuthenticationService authenticationService;
         private readonly IMapper mapper;
 
-        public AuthenticationController(ILogger<AuthenticationController> logger, IAuthenticationService authenticationService, IMapper mapper)
+        public AuthenticationController(IAuthenticationService authenticationService, IMapper mapper)
         {
-            _logger = logger;
             this.authenticationService = authenticationService;
             this.mapper = mapper;
         }

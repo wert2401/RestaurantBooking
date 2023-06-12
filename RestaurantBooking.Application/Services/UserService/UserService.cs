@@ -112,7 +112,7 @@ namespace RestaurantBooking.Application.Services.UserService
             return dbContext.Restaurants.Any(r => r.OwnerUserId == user.Id);
         }
 
-        private User? getByEmail(string email) => dbContext.Users.AsNoTracking().FirstOrDefault(u => u.Email == email);
+        private User? getByEmail(string email) => dbContext.Users.Include(u => u.Roles).AsNoTracking().FirstOrDefault(u => u.Email == email);
 
 
     }
