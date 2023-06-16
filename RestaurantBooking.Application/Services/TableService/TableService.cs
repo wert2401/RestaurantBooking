@@ -24,7 +24,7 @@ namespace RestaurantBooking.Application.Services.TableService
 
         public IQueryable<Table> GetAll()
         {
-            return dbContext.Tables.AsNoTracking().Include(t => t.TableClaims);
+            return dbContext.Tables;
         }
 
         public IQueryable<TableClaim> GetAllClaims()

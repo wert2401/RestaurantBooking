@@ -19,7 +19,7 @@ namespace RestaurantBooking.Application
         {
             services.AddDbContext<ApplicationDbContext>(options =>
             {
-                options.UseNpgsql(configuration.GetConnectionString("pgSql"));
+                options.UseLazyLoadingProxies().UseNpgsql(configuration.GetConnectionString("pgSql")).UseProjectables();
             });
 
             services.Configure<JwtOptions>(configuration.GetSection("JWT"));

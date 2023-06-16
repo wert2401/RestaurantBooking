@@ -36,7 +36,7 @@ namespace RestaurantBooking.Api.Controllers
         [EnableQuery]
         public IQueryable<RestaurantModel> Get()
         {
-            return restaurantService.GetAll().ToList().AsQueryable().ProjectTo<RestaurantModel>(mapper.ConfigurationProvider, new { serverUri = uriService.GetUri() });
+            return restaurantService.GetAll().ProjectTo<RestaurantModel>(mapper.ConfigurationProvider, new { serverUri = uriService.GetUri() });
         }
 
         [HttpGet("Details")]

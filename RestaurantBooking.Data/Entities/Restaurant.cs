@@ -22,11 +22,9 @@ namespace RestaurantBooking.Data.Entities
         public TimeSpan OpenTo { get; set; }
 
         public int TablesCount { get; set; }
-        public int VacantTablesCount => Tables.Where(t => !t.TableClaims.Any(c => !c.IsExpired) || t.TableClaims.Count == 0).Count();
-        public double Rating => Reviews.Count > 0 ? Reviews.Sum(r => r.Grade) / Reviews.Count : 0;
 
-        public List<Table> Tables { get; set; } = new();
-        public List<Review> Reviews { get; set; } = new();
-        public List<User> FavoritedBy { get; set; } = new();
+        public virtual ICollection<Table> Tables { get; set; }
+        public virtual ICollection<Review> Reviews { get; set; }
+        public virtual ICollection<User> FavoritedBy { get; set; }
     }
 }
