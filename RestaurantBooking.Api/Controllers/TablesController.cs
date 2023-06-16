@@ -71,7 +71,7 @@ namespace RestaurantBooking.Api.Controllers
 
             var user = userService.GetByEmail(User.Identity!.Name!);
 
-            if (user.Roles[0].Name == "Admin")
+            if (user.Roles.FirstOrDefault()?.Name == "Admin")
             {
                 var rest = restaurantService.GetByOwnerEmail(User?.Identity!.Name!);
                 if (!rest.Tables.Any(t => t.Id == claim.TableId))

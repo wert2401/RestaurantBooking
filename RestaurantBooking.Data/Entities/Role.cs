@@ -12,6 +12,6 @@ namespace RestaurantBooking.Data.Entities
         [MaxLength(100)]
         public string? Description { get; set; }
 
-        public List<User> Users { get; set; } = new();
+        public virtual ICollection<User> Users { get; set; }
     }
 }

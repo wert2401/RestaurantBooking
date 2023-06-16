@@ -62,7 +62,7 @@ namespace RestaurantBooking.Application.Services.UserService
                         .ThenInclude(t => t.TableClaims)
                 .Include(r => r.FavoriteRestaurants)
                     .ThenInclude(r => r.Reviews)
-                .Select(u => u.FavoriteRestaurants).First().ToList();
+                .Select(u => u.FavoriteRestaurants).First();
         }
 
         public void AddToFavorites(int userId, int restaurantId)
@@ -80,7 +80,7 @@ namespace RestaurantBooking.Application.Services.UserService
         public void RemoveFromFavorites(int userId, int restaurantId)
         {
             var user = dbContext.Users.Include(u => u.FavoriteRestaurants).First(u => u.Id == userId) ?? throw new Exception("user was not found");
-            var rest = user.FavoriteRestaurants.Find(r => r.Id == restaurantId) ?? throw new Exception("Restaurant was not found");
+            var rest = user.FavoriteRestaurants.FirstOrDefault(r => r.Id == restaurantId) ?? throw new Exception("Restaurant was not found");
             user.FavoriteRestaurants.Remove(rest);
 
             dbContext.SaveChanges();

@@ -19,7 +19,7 @@ namespace RestaurantBooking.Data.Entities
         public string? RefreshToken { get; set; }
         public DateTime RefreshTokenExpiring { get; set; }
 
-        public List<Role> Roles { get; set; } = new();
-        public List<Restaurant> FavoriteRestaurants { get; set; } = new();
+        public virtual ICollection<Role> Roles { get; set; }
+        public virtual ICollection<Restaurant> FavoriteRestaurants { get; set; }
     }
 }

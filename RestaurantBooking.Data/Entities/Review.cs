@@ -13,7 +13,7 @@ namespace RestaurantBooking.Data.Entities
         [Required]
         public int RestaurantId { get; set; }
 
-        public User User { get; set; } = null!;
-        public Restaurant Restaurant { get; set; } = null!;
+        public virtual User User { get; set; } = null!;
+        public virtual Restaurant Restaurant { get; set; } = null!;
     }
 }

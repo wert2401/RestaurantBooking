@@ -51,10 +51,7 @@ namespace RestaurantBooking.Application.Services.RestaurantService
 
         public IQueryable<Restaurant> GetAll()
         {
-            return dbContext.Restaurants.AsNoTracking()
-                .Include(r => r.Reviews)
-                .Include(r => r.Tables)
-                    .ThenInclude(t => t.TableClaims);
+            return dbContext.Restaurants;
         }
 
         public void Patch(Restaurant oldRestaurant, Restaurant newRestaurantModel)
@@ -67,7 +64,7 @@ namespace RestaurantBooking.Application.Services.RestaurantService
 
             if (newRestaurantModel.TablesCount < newRestaurantModel.Tables.Count)
             {
-                newRestaurantModel.Tables.RemoveRange(newRestaurantModel.TablesCount, newRestaurantModel.Tables.Count - newRestaurantModel.TablesCount);
+                newRestaurantModel.Tables.Where(t => t.TableNumber > newRestaurantModel.TablesCount).ToList().ForEach(t => newRestaurantModel.Tables.Remove(t));
             }
 
             if (newRestaurantModel.TablesCount > newRestaurantModel.Tables.Count)

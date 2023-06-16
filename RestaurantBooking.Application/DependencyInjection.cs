@@ -19,7 +19,7 @@ namespace RestaurantBooking.Application
         {
             services.AddDbContext<ApplicationDbContext>(options =>
             {
-                options.UseSqlite(configuration.GetConnectionString("sqlite"));
+                options.UseLazyLoadingProxies().UseSqlite(configuration.GetConnectionString("sqlite")).UseProjectables();
             });
 
             services.Configure<JwtOptions>(configuration.GetSection("JWT"));
