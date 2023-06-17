@@ -66,7 +66,7 @@ namespace RestaurantBooking.Api.Controllers
 
         [HttpPost]
         [Authorize(Roles = "Admin")]
-        public IActionResult Add([FromForm] RestaurantModelCreate model)
+        public IActionResult CreateRestaurant([FromForm] RestaurantModelCreate model)
         {
             var user = userService.GetByEmail(User.Identity!.Name!);
 
@@ -79,6 +79,12 @@ namespace RestaurantBooking.Api.Controllers
             {
                 string pathToImage = imageService.SaveImage(model.SchemeImage);
                 newRest.SchemeImage = pathToImage;
+            }
+
+            if (model.MenuFile != null)
+            {
+                string pathToMenu = imageService.SaveMenu(model.MenuFile);
+                newRest.MenuPath = pathToMenu;
             }
 
             newRest.OwnerUserId = user.Id;
