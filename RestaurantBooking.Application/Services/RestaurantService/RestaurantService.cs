@@ -82,6 +82,8 @@ namespace RestaurantBooking.Application.Services.RestaurantService
 
         public void Add(Restaurant newModel)
         {
+            newModel.Tables = new List<Table>();
+
             for (int i = 0; i < newModel.TablesCount; i++)
             {
                 newModel.Tables.Add(new Table { TableNumber = i + 1 });

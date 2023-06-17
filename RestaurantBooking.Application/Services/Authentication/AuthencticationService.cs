@@ -35,6 +35,8 @@ namespace RestaurantBooking.Application.Services.Authentication
 
             userModel.PasswordHash = BCrypt.Net.BCrypt.HashPassword(userModel.PasswordHash);
 
+            userModel.Roles = new List<Role>();
+
             if (isAdmin)
                 userModel.Roles.Add(roleService.GetRoleByName("Admin"));
             else
