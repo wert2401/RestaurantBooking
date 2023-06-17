@@ -22,6 +22,7 @@ namespace RestaurantBooking.Api.Models.Restaurant
         [Required]
         public TimeSpan OpenTo { get; set; }
         [Required]
+        [Range(1, 50)]
         public int TablesCount { get; set; }
     }
 }
