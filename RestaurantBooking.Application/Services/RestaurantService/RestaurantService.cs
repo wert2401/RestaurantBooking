@@ -97,7 +97,7 @@ namespace RestaurantBooking.Application.Services.RestaurantService
             var rest = dbContext.Restaurants.Find(review.RestaurantId);
 
             if (rest == null)
-                throw new Exception("Restaurant is not found");
+                throw new Exception("Restaurant was not found");
 
             rest.Reviews.Add(review);
 

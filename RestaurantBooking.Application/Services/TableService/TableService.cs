@@ -73,5 +73,16 @@ namespace RestaurantBooking.Application.Services.TableService
             dbContext.Update(tableClaim);
             dbContext.SaveChanges();
         }
+
+        public void RemoveClaim(int tableClaimId)
+        {
+            var tableClaim = dbContext.TableClaims.Find(tableClaimId);
+
+            if (tableClaim is null)
+                throw new InvalidOperationException("Table claim was not found");
+
+            dbContext.TableClaims.Remove(tableClaim);
+            dbContext.SaveChanges();
+        }
     }
 }
