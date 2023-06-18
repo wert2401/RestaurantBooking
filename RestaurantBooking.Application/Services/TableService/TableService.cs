@@ -56,6 +56,9 @@ namespace RestaurantBooking.Application.Services.TableService
             if (tableClaim.ClaimFromDate.TimeOfDay < rest.OpenFrom || tableClaim.ClaimToDate.TimeOfDay > rest.OpenTo)
                 throw new InvalidOperationException("Time for claiming is wrong. Work time of restaurant does not fit with the claimed time");
 
+            if (user.Roles.First().Name == "Admin" && rest.OwnerUserId != user.Id)
+                throw new InvalidOperationException("The owner of restaurant can claim table only in his restaurant");
+
             tableClaim.UserId = user.Id;
             tableClaim.CreatedDate = DateTime.UtcNow;
 
