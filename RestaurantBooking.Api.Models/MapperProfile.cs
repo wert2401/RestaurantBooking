@@ -38,7 +38,8 @@ namespace RestaurantBooking.Api.Models
 
             CreateMap<Data.Entities.Table, TableModel>()
                 .ForMember(d => d.VacantFrom, opt => opt.MapFrom(s => s.TableClaims.Select(c => c.ClaimToDate).OrderByDescending(c => c).FirstOrDefault()))
-                .ForMember(d => d.Restaurant, opt => opt.MapFrom(s => s.Restaurant.Name));
+                .ForMember(d => d.Restaurant, opt => opt.MapFrom(s => s.Restaurant.Name))
+                .ForMember(d => d.RestaurantId, opt => opt.MapFrom(s => s.RestaurantId));
 
             CreateMap<TableModelCreate, Data.Entities.Table>();
 
