@@ -57,6 +57,8 @@ namespace RestaurantBooking.Application.Services.RestaurantService
         public void Patch(Restaurant oldRestaurant, Restaurant newRestaurantModel)
         {
             newRestaurantModel.Id = oldRestaurant.Id;
+            newRestaurantModel.SchemeImage = oldRestaurant.SchemeImage;
+            newRestaurantModel.MenuPath = oldRestaurant.MenuPath;
             newRestaurantModel.OwnerUserId = oldRestaurant.OwnerUserId;
 
             dbContext.Attach(newRestaurantModel);
