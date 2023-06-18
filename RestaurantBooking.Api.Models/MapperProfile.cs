@@ -38,14 +38,14 @@ namespace RestaurantBooking.Api.Models
 
             CreateMap<Data.Entities.Table, TableModel>()
                 .ForMember(d => d.VacantFrom, opt => opt.MapFrom(s => s.TableClaims.Select(c => c.ClaimToDate).OrderByDescending(c => c).FirstOrDefault()))
-                .ForMember(d => d.Restaurant, opt => opt.MapFrom(s => s.Restaurant.Name))
-                .ForMember(d => d.RestaurantId, opt => opt.MapFrom(s => s.RestaurantId));
+                .ForMember(d => d.Restaurant, opt => opt.MapFrom(s => s.Restaurant.Name));
 
             CreateMap<TableModelCreate, Data.Entities.Table>();
 
             CreateMap<TableClaim, TableClaimModel>()
                 .ForMember(d => d.TableNumber, opt => opt.MapFrom(s => s.Table.TableNumber))
                 .ForMember(d => d.Restaurant, opt => opt.MapFrom(s => s.Table.Restaurant.Name))
+                .ForMember(d => d.RestaurantId, opt => opt.MapFrom(s => s.Table.RestaurantId))
                 .ForMember(d => d.UserName, opt => opt.MapFrom(s => s.User.Name))
                 .ForMember(d => d.UserPhoneNumber, opt => opt.MapFrom(s => s.User.Phone))
                 .ForMember(d => d.RestaurantPhoneNumber, opt => opt.MapFrom(s => s.Table.Restaurant.PhoneNumber));
