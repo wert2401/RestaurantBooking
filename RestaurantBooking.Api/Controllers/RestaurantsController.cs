@@ -95,7 +95,7 @@ namespace RestaurantBooking.Api.Controllers
 
         [HttpPost("ChangeImage")]
         [Authorize(Roles = "Admin")]
-        public IActionResult ChangeImage(IFormFile image)
+        public IActionResult ChangeSchemeImage(IFormFile image)
         {
             if (image.ContentType is not ("image/png" or "image/jpeg"))
                 return BadRequest("Wrong type of uploading file");
@@ -109,6 +109,27 @@ namespace RestaurantBooking.Api.Controllers
             string pathToImage = imageService.SaveImage(image);
 
             rest.SchemeImage = pathToImage;
+
+            restaurantService.Patch(rest, rest);
+
+            return Ok(new { NewImgUrl = pathToImage });
+        }
+
+        [HttpPost("ChangeRestaurantImage")]
+        [Authorize(Roles = "Admin")]
+        public IActionResult ChangeRestaurantImage(IFormFile image)
+        {
+            if (image.ContentType is not ("image/png" or "image/jpeg"))
+                return BadRequest("Wrong type of uploading file");
+
+            var rest = restaurantService.GetByOwnerEmail(User.Identity!.Name!);
+
+            if (rest == null)
+                return Unauthorized();
+
+            string pathToImage = imageService.SaveImage(image);
+
+            rest.RestaurantImage = pathToImage;
 
             restaurantService.Patch(rest, rest);
 
