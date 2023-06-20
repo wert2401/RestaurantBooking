@@ -14,13 +14,13 @@ namespace RestaurantBooking.Api.Models
         {
             string serverUri = "";
             CreateMap<Data.Entities.Restaurant, RestaurantModel>()
-                .ForMember(r => r.VacantTablesCount, opt => opt.MapFrom(s => s.Tables.Where(t => t.VacantFrom > DateTime.UtcNow.AddDays(1)).Count()))
+                .ForMember(r => r.VacantTablesCount, opt => opt.MapFrom(s => s.Tables.Where(t => t.VacantFrom < DateTime.UtcNow.AddDays(1)).Count()))
                 .ForMember(r => r.Rating, opt => opt.MapFrom(s => s.Reviews.Count() > 0 ? s.Reviews.Average(r => r.Grade) : 0))
                 .ForMember(r => r.SchemeImage, opt => opt.MapFrom(s => s.SchemeImage == null ? null : serverUri + s.SchemeImage))
                 .ForMember(r => r.MenuPath, opt => opt.MapFrom(s => s.MenuPath == null ? null : serverUri + s.MenuPath));
 
             CreateMap<Data.Entities.Restaurant, RestaurantModelDetailed>()
-                .ForMember(r => r.VacantTablesCount, opt => opt.MapFrom(s => s.Tables.Where(t => t.VacantFrom > DateTime.UtcNow.AddDays(1)).Count()))
+                .ForMember(r => r.VacantTablesCount, opt => opt.MapFrom(s => s.Tables.Where(t => t.VacantFrom < DateTime.UtcNow.AddDays(1)).Count()))
                 .ForMember(r => r.Rating, opt => opt.MapFrom(s => s.Reviews.Count() > 0 ? s.Reviews.Average(r => r.Grade) : 0))
                 .AfterMap((s, d, context) =>
                 {
