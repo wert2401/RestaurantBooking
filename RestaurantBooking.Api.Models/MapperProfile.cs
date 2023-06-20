@@ -47,7 +47,8 @@ namespace RestaurantBooking.Api.Models
                 .ForMember(d => d.RestaurantId, opt => opt.MapFrom(s => s.Table.RestaurantId))
                 .ForMember(d => d.UserName, opt => opt.MapFrom(s => s.User.Name))
                 .ForMember(d => d.UserPhoneNumber, opt => opt.MapFrom(s => s.User.Phone))
-                .ForMember(d => d.RestaurantPhoneNumber, opt => opt.MapFrom(s => s.Table.Restaurant.PhoneNumber));
+                .ForMember(d => d.RestaurantPhoneNumber, opt => opt.MapFrom(s => s.Table.Restaurant.PhoneNumber))
+                .ForMember(d => d.IsExpired, opt => opt.MapFrom(s => s.ClaimToDate < DateTime.UtcNow));
 
             CreateMap<TableClaimRequestModel, TableClaim>();
 
