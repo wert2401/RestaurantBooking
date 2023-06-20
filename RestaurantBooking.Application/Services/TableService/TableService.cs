@@ -48,7 +48,7 @@ namespace RestaurantBooking.Application.Services.TableService
 
             dbContext.Entry(table).Collection(t => t.TableClaims).Load();
 
-            if (table.IsClaimed)
+            if (table.VacantFrom > tableClaim.ClaimFromDate)
                 throw new InvalidOperationException("Table was already claimed");
 
             var rest = dbContext.Restaurants.Find(table.RestaurantId) ?? throw new InvalidOperationException("Table with the given id was not found");
