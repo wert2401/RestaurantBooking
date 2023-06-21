@@ -57,6 +57,8 @@ namespace RestaurantBooking.Application.Services.RestaurantService
         public void Patch(Restaurant oldRestaurant, Restaurant newRestaurantModel)
         {
             newRestaurantModel.Id = oldRestaurant.Id;
+            newRestaurantModel.SchemeImage = oldRestaurant.SchemeImage;
+            newRestaurantModel.MenuPath = oldRestaurant.MenuPath;
             newRestaurantModel.OwnerUserId = oldRestaurant.OwnerUserId;
 
             dbContext.Attach(newRestaurantModel);
@@ -82,6 +84,8 @@ namespace RestaurantBooking.Application.Services.RestaurantService
 
         public void Add(Restaurant newModel)
         {
+            newModel.Tables = new List<Table>();
+
             for (int i = 0; i < newModel.TablesCount; i++)
             {
                 newModel.Tables.Add(new Table { TableNumber = i + 1 });
@@ -97,7 +101,7 @@ namespace RestaurantBooking.Application.Services.RestaurantService
             var rest = dbContext.Restaurants.Find(review.RestaurantId);
 
             if (rest == null)
-                throw new Exception("Restaurant is not found");
+                throw new Exception("Restaurant was not found");
 
             rest.Reviews.Add(review);
 

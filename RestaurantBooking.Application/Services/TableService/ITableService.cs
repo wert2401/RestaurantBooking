@@ -10,5 +10,6 @@ namespace RestaurantBooking.Application.Services.TableService
         IQueryable<Table> GetAll();
         IQueryable<TableClaim> GetAllClaims();
         TableClaim? GetTableClaimById(int tableClaimId);
+        void RemoveClaim(int tableClaimId);
     }
 }

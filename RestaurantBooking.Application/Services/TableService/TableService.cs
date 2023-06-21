@@ -48,13 +48,16 @@ namespace RestaurantBooking.Application.Services.TableService
 
             dbContext.Entry(table).Collection(t => t.TableClaims).Load();
 
-            if (table.IsClaimed)
+            if (table.VacantFrom > tableClaim.ClaimFromDate)
                 throw new InvalidOperationException("Table was already claimed");
 
             var rest = dbContext.Restaurants.Find(table.RestaurantId) ?? throw new InvalidOperationException("Table with the given id was not found");
 
             if (tableClaim.ClaimFromDate.TimeOfDay < rest.OpenFrom || tableClaim.ClaimToDate.TimeOfDay > rest.OpenTo)
                 throw new InvalidOperationException("Time for claiming is wrong. Work time of restaurant does not fit with the claimed time");
+
+            if (user.Roles.First().Name == "Admin" && rest.OwnerUserId != user.Id)
+                throw new InvalidOperationException("The owner of restaurant can claim table only in his restaurant");
 
             tableClaim.UserId = user.Id;
             tableClaim.CreatedDate = DateTime.UtcNow;
@@ -71,6 +74,17 @@ namespace RestaurantBooking.Application.Services.TableService
             tableClaim.IsCanceled = true;
 
             dbContext.Update(tableClaim);
+            dbContext.SaveChanges();
+        }
+
+        public void RemoveClaim(int tableClaimId)
+        {
+            var tableClaim = dbContext.TableClaims.Find(tableClaimId);
+
+            if (tableClaim is null)
+                throw new InvalidOperationException("Table claim was not found");
+
+            dbContext.TableClaims.Remove(tableClaim);
             dbContext.SaveChanges();
         }
     }

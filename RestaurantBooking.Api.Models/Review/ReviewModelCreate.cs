@@ -7,6 +7,8 @@ namespace RestaurantBooking.Api.Models.Review
         [Required]
         public int RestaurantId { get; set; }
         [Required]
+        public int TableClaimId { get; set; }
+        [Required]
         [Range(0, 5)]
         public int Grade { get; set; }
     }

@@ -8,6 +8,7 @@ using RestaurantBooking.Api.Models.Review;
 using RestaurantBooking.Api.Services;
 using RestaurantBooking.Application.Services.FilesService;
 using RestaurantBooking.Application.Services.RestaurantService;
+using RestaurantBooking.Application.Services.TableService;
 using RestaurantBooking.Application.Services.UserService;
 using RestaurantBooking.Data.Entities;
 
@@ -18,14 +19,16 @@ namespace RestaurantBooking.Api.Controllers
     public class RestaurantsController : ControllerBase
     {
         private readonly IRestaurantService restaurantService;
+        private readonly ITableService tableService;
         private readonly IUserService userService;
         private readonly IFileService imageService;
         private readonly IMapper mapper;
         private readonly IUriService uriService;
 
-        public RestaurantsController(IRestaurantService restaurantService, IUserService userService, IFileService imageService, IMapper mapper, IUriService uriService)
+        public RestaurantsController(IRestaurantService restaurantService, ITableService tableService, IUserService userService, IFileService imageService, IMapper mapper, IUriService uriService)
         {
             this.restaurantService = restaurantService;
+            this.tableService = tableService;
             this.userService = userService;
             this.imageService = imageService;
             this.mapper = mapper;
@@ -63,7 +66,7 @@ namespace RestaurantBooking.Api.Controllers
 
         [HttpPost]
         [Authorize(Roles = "Admin")]
-        public IActionResult Add([FromForm] RestaurantModelCreate model)
+        public IActionResult CreateRestaurant([FromForm] RestaurantModelCreate model)
         {
             var user = userService.GetByEmail(User.Identity!.Name!);
 
@@ -78,6 +81,12 @@ namespace RestaurantBooking.Api.Controllers
                 newRest.SchemeImage = pathToImage;
             }
 
+            if (model.MenuFile != null)
+            {
+                string pathToMenu = imageService.SaveMenu(model.MenuFile);
+                newRest.MenuPath = pathToMenu;
+            }
+
             newRest.OwnerUserId = user.Id;
 
             restaurantService.Add(newRest);
@@ -86,7 +95,7 @@ namespace RestaurantBooking.Api.Controllers
 
         [HttpPost("ChangeImage")]
         [Authorize(Roles = "Admin")]
-        public IActionResult ChangeImage(IFormFile image)
+        public IActionResult ChangeSchemeImage(IFormFile image)
         {
             if (image.ContentType is not ("image/png" or "image/jpeg"))
                 return BadRequest("Wrong type of uploading file");
@@ -100,6 +109,27 @@ namespace RestaurantBooking.Api.Controllers
             string pathToImage = imageService.SaveImage(image);
 
             rest.SchemeImage = pathToImage;
+
+            restaurantService.Patch(rest, rest);
+
+            return Ok(new { NewImgUrl = pathToImage });
+        }
+
+        [HttpPost("ChangeRestaurantImage")]
+        [Authorize(Roles = "Admin")]
+        public IActionResult ChangeRestaurantImage(IFormFile image)
+        {
+            if (image.ContentType is not ("image/png" or "image/jpeg"))
+                return BadRequest("Wrong type of uploading file");
+
+            var rest = restaurantService.GetByOwnerEmail(User.Identity!.Name!);
+
+            if (rest == null)
+                return Unauthorized();
+
+            string pathToImage = imageService.SaveImage(image);
+
+            rest.RestaurantImage = pathToImage;
 
             restaurantService.Patch(rest, rest);
 
@@ -136,6 +166,8 @@ namespace RestaurantBooking.Api.Controllers
             review.UserId = userService.GetByEmail(User.Identity!.Name!).Id;
 
             restaurantService.Rate(review);
+
+            tableService.RemoveClaim(modelCreate.TableClaimId);
 
             return Ok();
         }

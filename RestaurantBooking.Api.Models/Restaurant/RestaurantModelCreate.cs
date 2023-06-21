@@ -10,7 +10,7 @@ namespace RestaurantBooking.Api.Models.Restaurant
         public string Name { get; set; } = null!;
         [Required]
         public string Description { get; set; } = null!;
-        public IFormFile? MenuPath { get; set; }
+        public IFormFile? MenuFile { get; set; }
         public IFormFile? SchemeImage { get; set; }
         public string? PhoneNumber { get; set; }
         [Required]
@@ -22,6 +22,7 @@ namespace RestaurantBooking.Api.Models.Restaurant
         [Required]
         public TimeSpan OpenTo { get; set; }
         [Required]
+        [Range(1, 50)]
         public int TablesCount { get; set; }
     }
 }

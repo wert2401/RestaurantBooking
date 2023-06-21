@@ -13,6 +13,7 @@ namespace RestaurantBooking.Api.Models.Restaurant
         public int OwnerUserId { get; set; }
         public string? MenuPath { get; set; }
         public string? SchemeImage { get; set; }
+        public string? RestaurantImage { get; set; }
         public string? PhoneNumber { get; set; }
         [Required]
         public string Address { get; set; } = null!;
