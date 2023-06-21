@@ -59,6 +59,7 @@ namespace RestaurantBooking.Application.Services.RestaurantService
             newRestaurantModel.Id = oldRestaurant.Id;
             newRestaurantModel.SchemeImage = oldRestaurant.SchemeImage;
             newRestaurantModel.MenuPath = oldRestaurant.MenuPath;
+            newRestaurantModel.RestaurantImage = oldRestaurant.RestaurantImage;
             newRestaurantModel.OwnerUserId = oldRestaurant.OwnerUserId;
 
             dbContext.Attach(newRestaurantModel);
